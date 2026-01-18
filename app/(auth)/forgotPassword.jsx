@@ -1,5 +1,7 @@
 import { Image } from "expo-image";
+
 import { router } from "expo-router";
+import { ArrowLeft } from "lucide-react-native";
 import { useState } from "react";
 import {
   StyleSheet,
@@ -8,10 +10,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useResponsive } from "../../components/ui/media";
 
-export default function LoginScreen() {
+export default function ForgotPasswordScreen() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { isSmall } = useResponsive();
 
   // media query
 
@@ -20,21 +23,34 @@ export default function LoginScreen() {
       {/* logo */}
 
       <View style={styles.logoContainer}>
-        <Text style={styles.title}>Login</Text>
+        {/* go back icone */}
+        <TouchableOpacity
+          onPress={() => router.back()}
+          style={styles.backIcone}
+        >
+          <ArrowLeft size={30} color="#000000" />
+        </TouchableOpacity>
         <Image
           source={require("../../assets/images/dash-logo.png")}
           style={styles.logo}
         />
       </View>
 
-      <Text style={styles.subleTitle1}>Login to your existing account.</Text>
-      <Text style={styles.subleTitle2}>Enter your details below</Text>
+      <Text style={[styles.title, { fontSize: isSmall ? 25 : 32 }]}>
+        Forgot your password?{" "}
+      </Text>
+      <Text style={styles.subleTitle1}>
+        Forgot your password? No worries! You can request another.
+      </Text>
+      <Text style={styles.subleTitle2}>
+        Input your email address to get a link.
+      </Text>
 
       {/* inputs */}
       <View style={styles.inputsContainer}>
         <Text style={styles.labelText}>Enter your email address</Text>
         <TextInput
-          style={styles.textInput}
+          style={[styles.textInput, { width: isSmall ? "100%" : "358px" }]}
           value={email}
           onChangeText={setEmail}
           placeholder="Enter your email address"
@@ -42,36 +58,16 @@ export default function LoginScreen() {
           autoCapitalize="none"
           keyboardType="email-address"
         />
-        <Text style={styles.labelText}>Enter your password</Text>
-        <TextInput
-          style={styles.textInput}
-          value={password}
-          onChangeText={setPassword}
-          placeholder="Enter your password"
-          placeholderTextColor="#000000"
-          autoCapitalize="none"
-          secureTextEntry={true}
-          keyboardType="email-address"
-        />
-        <TouchableOpacity
-          onPress={() => router.push("forgotPassword")}
-          style={styles.forgotPasswordBtn}
-        >
-          <Text style={styles.forgotPasswordText}>Forgot password?</Text>
-        </TouchableOpacity>
 
         {/* bouton */}
         <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Sign-in</Text>
+          <Text style={styles.buttonText}>Request link</Text>
         </TouchableOpacity>
         <View style={styles.existingAccount}>
-          <Text style={styles.alreadyAccount}>Don’t have an account? </Text>
-          <TouchableOpacity
-            onPress={() => router.push("register")}
-            style={styles.signupLink}
-          >
-            <Text style={styles.signupLink}>Sign-up</Text>
-          </TouchableOpacity>
+          <Text style={styles.alreadyAccount}>
+            Didn’t get one? Request another
+          </Text>
+          <Text style={styles.time}>in 2:00</Text>
         </View>
       </View>
     </View>
@@ -82,6 +78,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#ffffff",
+    padding: 10,
   },
 
   logoContainer: {
@@ -97,13 +94,13 @@ const styles = StyleSheet.create({
     height: 58.5,
   },
   title: {
-    fontSize: 32,
     padding: 10,
     fontWeight: "bold",
     lineHeight: 20,
     letterSpacing: 0.6,
+    alignSelf: "center",
     color: "#000000",
-    marginTop: 20,
+    marginTop: 40,
   },
 
   subleTitle1: {
@@ -150,7 +147,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 20,
+    marginTop: 100,
   },
   buttonText: {
     fontSize: 16,
@@ -158,23 +155,6 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     letterSpacing: 0.5,
     color: "#000000",
-  },
-  forgotPasswordBtn: {
-    width: 161,
-    height: 50,
-    alignSelf: "flex-end",
-    alignItems: "center",
-    justifyContent: "end",
-    marginBottom: 10,
-  },
-  forgotPasswordText: {
-    fontSize: 14,
-    fontWeight: "bold",
-    lineHeight: 20,
-    letterSpacing: 0.5,
-    color: "#01723F",
-    marginBottom: 10,
-    marginRight: 10,
   },
 
   existingAccount: {
@@ -193,10 +173,10 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     letterSpacing: 0.5,
   },
-  signupLink: {
+  time: {
     color: "#01723F",
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: "800",
     lineHeight: 20,
     letterSpacing: 0.5,
   },

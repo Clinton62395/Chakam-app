@@ -18,6 +18,12 @@ export default function AuthLayout() {
       <Stack.Screen name="submitReport" />
       <Stack.Screen name="reviewRepport" />
       <Stack.Screen name="success" />
+      <Stack.Screen
+        name="forgotPassword"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 }

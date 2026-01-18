@@ -31,7 +31,7 @@ export default function Index() {
             <Text style={styles.welcomTexte}>Welcome to Chakam </Text>
             <Text style={styles.reportText}>Report • Share • Stay Safe</Text>
             <TouchableOpacity
-              onPress={() => router.push("login")}
+              onPress={() => router.push("register")}
               style={styles.continuBtn}
             >
               <Text style={styles.buttonText}>Continue</Text>

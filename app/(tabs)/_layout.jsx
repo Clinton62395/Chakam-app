@@ -1,6 +1,7 @@
 import { Tabs } from "expo-router";
 import { FileText, Home, Settings } from "lucide-react-native";
 import React from "react";
+import { Text, View } from "react-native";
 
 export default function TabLayout() {
   return (
@@ -8,7 +9,7 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: "#00FB8A",
-        tabBarInactiveTintColor: "#999",
+        tabBarInactiveTintColor: "#00FB8A",
         tabBarStyle: {
           height: 64,
           backgroundColor: "#001A3D",
@@ -19,26 +20,104 @@ export default function TabLayout() {
     >
       <Tabs.Screen
         name="home"
-        title="Dashboard"
         options={{
-          tabBarIcon: ({ color, size }) => <Home color={color} size={size} />,
-        }}
-      />
-      <Tabs.Screen
-        name="reports"
-        title="Reports"
-        options={{
-          tabBarIcon: ({ size, color }) => (
-            <FileText color={color} size={size} />
+          tabBarIcon: ({ focused, color, size }) => (
+            <View style={{ alignItems: "center" }}>
+              <Home color={color} size={size} />
+              {focused && (
+                <View
+                  style={{
+                    marginTop: 4,
+                    width: 24,
+                    height: 2,
+                    backgroundColor: color,
+                    borderRadius: 1,
+                  }}
+                />
+              )}
+            </View>
+          ),
+          tabBarLabel: ({ focused, color }) => (
+            <Text
+              style={{
+                color,
+                fontSize: 12,
+                fontWeight: focused ? "700" : "400",
+                textAlign: "center",
+              }}
+            >
+              Home
+            </Text>
           ),
         }}
       />
+
+      {/* Reports */}
+      <Tabs.Screen
+        name="reports"
+        options={{
+          tabBarIcon: ({ focused, color, size }) => (
+            <View style={{ alignItems: "center" }}>
+              <FileText color={color} size={size} />
+              {focused && (
+                <View
+                  style={{
+                    marginTop: 4,
+                    width: 24,
+                    height: 2,
+                    backgroundColor: color,
+                    borderRadius: 1,
+                  }}
+                />
+              )}
+            </View>
+          ),
+          tabBarLabel: ({ focused, color }) => (
+            <Text
+              style={{
+                color,
+                fontSize: 12,
+                fontWeight: focused ? "700" : "400",
+                textAlign: "center",
+              }}
+            >
+              My Reports
+            </Text>
+          ),
+        }}
+      />
+
+      {/* Settings */}
       <Tabs.Screen
         name="settings"
-        title="Settings"
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Settings color={color} size={size} />
+          tabBarIcon: ({ focused, color, size }) => (
+            <View style={{ alignItems: "center" }}>
+              <Settings color={color} size={size} />
+              {focused && (
+                <View
+                  style={{
+                    marginTop: 4,
+                    width: 24,
+                    height: 2,
+                    backgroundColor: color,
+                    borderRadius: 1,
+                  }}
+                />
+              )}
+            </View>
+          ),
+          tabBarLabel: ({ focused, color }) => (
+            <Text
+              style={{
+                color,
+                fontSize: 12,
+                fontWeight: focused ? "700" : "400",
+                textAlign: "center",
+              }}
+            >
+              Settings
+            </Text>
           ),
         }}
       />
