@@ -36,16 +36,36 @@ export default function SettingsComponent() {
       {/* Settings section */}
       <Text style={styles.sectionTitle}>Settings</Text>
       <View style={styles.card}>
-        <SettingItem icon={User} label="Account & Profile" onPress={() => {}} />
-        <SettingItem icon={Pencil} label="App preferences" onPress={() => {}} />
-        <SettingItem icon={Bell} label="Notifications" onPress={() => {}} />
+        <SettingItem
+          icon={User}
+          label="Account & Profile"
+          onPress={() => router.push("profile")}
+        />
+        <SettingItem
+          icon={Pencil}
+          label="App preferences"
+          onPress={() => router.push("preferences")}
+        />
+        <SettingItem
+          icon={Bell}
+          label="Notifications"
+          onPress={() => router.push("notification")}
+        />
       </View>
 
       {/* Support section */}
       <Text style={styles.sectionTitle}>Support</Text>
       <View style={styles.card}>
-        <SettingItem icon={HelpCircle} label="For FAQ" onPress={() => {}} />
-        <SettingItem icon={Info} label="About" onPress={() => {}} />
+        <SettingItem
+          icon={HelpCircle}
+          label="For FAQ"
+          onPress={() => router.push("FQA")}
+        />
+        <SettingItem
+          icon={Info}
+          label="About"
+          onPress={() => router.push("about")}
+        />
       </View>
 
       {/* Footer actions */}

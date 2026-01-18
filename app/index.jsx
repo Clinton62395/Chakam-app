@@ -23,10 +23,6 @@ export default function Index() {
         
       >
         <View>
-          {/* <Image
-            source={require("../assets/images/wecomepage.png")}
-            style={styles.bottomImage}
-          /> */}
           <View style={styles.bottomImageTextContainer}>
             <Text style={styles.welcomTexte}>Welcome to Chakam </Text>
             <Text style={styles.reportText}>Report • Share • Stay Safe</Text>

@@ -56,6 +56,15 @@ export default function TabLayout() {
       <Tabs.Screen
         name="reports"
         options={{
+          headerShown: true,
+          headerTransparent: true,
+          headerTitle: "Reports",
+          headerTitleAlign: "center",
+          headerTitleStyle: {
+            fontSize: 20,
+            fontWeight: "bold",
+            color: "#000000",
+          },
           tabBarIcon: ({ focused, color, size }) => (
             <View style={{ alignItems: "center" }}>
               <FileText color={color} size={size} />

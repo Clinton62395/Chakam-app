@@ -7,9 +7,15 @@ import {
   FileText,
   Flame,
 } from "lucide-react-native";
+import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Calendar } from "react-native-calendars";
 
 export default function ReportComponent() {
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0],
+  );
+  const [showCalendar, setShowCalendar] = useState(false);
   const router = useRouter();
 
   const stats = [
@@ -49,6 +55,18 @@ export default function ReportComponent() {
     },
   ];
 
+  //   calender
+
+  const CalendarComponent = () => (
+    <Calendar
+      onDayPress={(day) => setSelectedDate(day.dateString)}
+      setShowCalendar={setShowCalendar}
+      markedDates={{
+        [selectedDate]: { selected: true, selectedColor: "#00FB8A" },
+      }}
+    />
+  );
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -56,7 +74,6 @@ export default function ReportComponent() {
         <TouchableOpacity onPress={() => router.back()}>
           <ChevronLeft size={24} color="#000" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Reports</Text>
       </View>
 
       {/* Stats */}
@@ -84,15 +101,32 @@ export default function ReportComponent() {
       <View style={styles.calendarHeader}>
         <Text style={styles.sectionTitle}>Report calendar</Text>
         <TouchableOpacity>
-          <Text style={styles.viewAll}>View all</Text>
+          <Text style={styles.viewAllText}>View all</Text>
         </TouchableOpacity>
       </View>
 
-      <View style={styles.monthSelector}>
-        <ChevronLeft size={18} color="#000" />
-        <Text style={styles.monthText}>March</Text>
-        <ChevronRight size={18} color="#000" />
+      {/* view all */}
+      <View style={styles.viewAll}>
+        {/* icone */}
+        <ChevronLeft size={24} color="#000000" />
+        <TouchableOpacity onPress={() => setShowCalendar(!showCalendar)}>
+          <Text style={styles.viewAllText}>
+            {new Date(selectedDate).toLocaleDateString({
+              month: "long",
+              year: "numeric",
+              day: "numeric",
+            }) || "March"}
+          </Text>
+        </TouchableOpacity>
+        <ChevronRight size={24} color="#000000" />
       </View>
+
+      {/* calendar */}
+      {showCalendar && (
+        <View style={styles.calendarContainer}>
+          <CalendarComponent />
+        </View>
+      )}
 
       {/* Reports list */}
       <View style={styles.list}>
@@ -131,8 +165,10 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
+    alignSelf: "flex-start",
     gap: 10,
     marginBottom: 20,
+    marginTop: 20,
   },
   headerTitle: {
     fontSize: 22,
@@ -143,18 +179,21 @@ const styles = StyleSheet.create({
   /* Stats */
   statsContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    alignItems: "center",
+    alignSelf: "center",
+    gap: 4,
     marginBottom: 25,
   },
   statCard: {
-    width: "30%",
-    backgroundColor: "#F3F4F6",
+    width: 117,
+    height: 97,
+    backgroundColor: "#D9D9D957",
     borderRadius: 16,
-    paddingVertical: 16,
+    paddingVertical: 20,
     alignItems: "center",
   },
   statCardActive: {
-    backgroundColor: "#00E58C",
+    backgroundColor: "#00FB8A",
   },
   statValue: {
     fontSize: 20,
@@ -186,8 +225,19 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   viewAll: {
-    fontSize: 12,
-    color: "#00A870",
+    flexDirection: "row",
+    width: "100%",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderRadius: 8,
+    backgroundColor: "#E5E7EB",
+    marginBottom: 10,
+  },
+  viewAllText: {
+    fontSize: 16,
+    color: "#000000",
     fontWeight: "500",
   },
   monthSelector: {
@@ -232,5 +282,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#00A870",
     fontWeight: "600",
+  },
+
+  calendarContainer: {
+    marginTop: 20,
+    marginBottom: 20,
+    paddingHorizontal: 20,
   },
 });
