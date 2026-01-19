@@ -104,7 +104,6 @@ export default function Verification() {
                   key={index}
                   value={item}
                   maxLength={1}
-                  placeholder={index.toString()}
                   keyboardType="number-pad"
                   ref={(el) => (inputRef.current[index] = el)}
                   style={[
