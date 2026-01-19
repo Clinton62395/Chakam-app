@@ -1,5 +1,5 @@
-import AboutAppComponent from "../../components/settings/AboutApp";
+import AboutComponent from "../../components/settings/AboutComponent";
 
 export default function AboutScreen() {
-  return <AboutAppComponent />;
+  return <AboutComponent />;
 }

@@ -1,12 +1,7 @@
 import { useRouter } from "expo-router";
 import { ChevronLeft } from "lucide-react-native";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScaledSheet } from "react-native-size-matters";
 
 export default function FAQComponent() {
   const router = useRouter();
@@ -26,14 +21,19 @@ export default function FAQComponent() {
       answer:
         "Infrastructure problems, property-related issues, public concerns and maintenance needs requiring action and attention.",
     },
+    {
+      question: "How do I report an issue?",
+      answer:
+        "You can report issues by filling out a form on the home page. You can also report issues from the property page.",
+    },
   ];
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => router.back()} style={styles.back}>
           <ChevronLeft size={24} color="#000" />
         </TouchableOpacity>
-        <Text style={styles.title}>Frequently Asked Questions</Text>
+        <Text style={styles.title}>FAQ</Text>
       </View>
 
       <ScrollView style={styles.content}>
@@ -44,63 +44,57 @@ export default function FAQComponent() {
           </View>
         ))}
       </ScrollView>
-
-      <View style={styles.footer}>
-        <TouchableOpacity>
-          <Text style={styles.footerText}>Back to top</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#ffffff",
-    paddingHorizontal: 20,
-    paddingTop: 50,
+    paddingTop: "10@ms",
   },
   header: {
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
-    paddingHorizontal: 20,
-    paddingTop: 60,
-    paddingBottom: 20,
+    paddingHorizontal: "20@ms",
+    paddingTop: "60@ms",
+    paddingBottom: "20@ms",
   },
   title: {
-    fontSize: 32,
+    fontSize: "32@ms",
     fontWeight: "700",
     color: "#000000",
     letterSpacing: -0.5,
+    alignSelf: "flex-start",
+    marginTop: "10@ms",
+  },
+  back: {
+    paddingHorizontal: "10@ms",
+    alignSelf: "flex-start",
   },
   content: {
-    paddingHorizontal: 20,
-    paddingTop: 10,
+    paddingHorizontal: "20@ms",
+    paddingTop: "10@sm",
   },
   faq: {
-    marginBottom: 20,
+    marginBottom: "20@ms",
+    backgroundColor: "#F2F2F2",
+    borderRadius: "9@ms",
+    height: "135@ms",
+    padding: "10@ms",
   },
   question: {
-    fontSize: 16,
+    fontSize: "20@ms",
+    textDecorationLine: "underline",
     fontWeight: "600",
     color: "#000000",
-    marginBottom: 5,
+    marginBottom: "5@ms",
   },
   answer: {
-    fontSize: 14,
+    fontSize: "14@ms",
     fontWeight: "400",
     color: "#000000",
-    marginBottom: 20,
-  },
-  footer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 40,
-  },
-  footerText: {
-    fontSize: 14,
-    color: "#FF0000",
-    fontWeight: "500",
+    marginBottom: "20@ms",
   },
 });

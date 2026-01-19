@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
     lineHeight: 20,
     fontWeight: "400",
+    marginTop: 10,
   },
 
   continuBtn: {

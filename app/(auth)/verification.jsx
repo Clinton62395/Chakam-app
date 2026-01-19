@@ -1,67 +1,123 @@
 import { useRouter } from "expo-router";
-import { Clock7 } from "lucide-react-native";
-import { useRef, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ArrowLeft, Clock7 } from "lucide-react-native";
+import { useEffect, useRef, useState } from "react";
+
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { ScaledSheet } from "react-native-size-matters";
 
 export default function Verification() {
   const [onfocus, setOnfocus] = useState(false);
+  const [code, setCode] = useState(["1", "2", "3", "4", "", ""]);
+  const [showResetButton, setShowResetButton] = useState(false);
+  const [remainingTime, setRemainingTime] = useState(300); // en secondes (5 minutes)
 
-  const input_lenght = 6;
-  const [code, setCode] = useState(Array(input_lenght).fill(""));
+  const formatTime = (seconds) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s < 10 ? "0" : ""}${s}`;
+  };
+
   const inputRef = useRef([]);
 
   const router = useRouter();
 
+  // Autofocus sur le premier input au montage
+  useEffect(() => {
+    setTimeout(() => {
+      inputRef.current[0]?.focus();
+    }, 100);
+  }, []);
+
+  // Timer countdown
+  useEffect(() => {
+    if (remainingTime <= 0) {
+      setShowResetButton(true);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setRemainingTime((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setShowResetButton(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [remainingTime]);
+
+  const handleResetTimer = () => {
+    setShowResetButton(false);
+    setRemainingTime(300);
+    setCode(Array([]));
+    inputRef.current[0]?.focus();
+  };
+
+  const handleChangeText = (text, index) => {
+    // Mise à jour du code
+    const newCode = [...code];
+    newCode[index] = text;
+    setCode(newCode);
+
+    // Focus sur le prochain input si du texte est entré
+    if (text && index < code.length - 1) {
+      inputRef.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyPress = (e, index) => {
+    // Retour à l'input précédent si backspace et input vide
+    if (e.nativeEvent.key === "Backspace" && !code[index] && index > 0) {
+      inputRef.current[index - 1]?.focus();
+    }
+  };
+
   return (
-    <>
-      {/* verification content */}
-      <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <View>
+        {/* go back icone */}
+        <TouchableOpacity
+          onPress={() => router.back()}
+          style={styles.backIcone}
+        >
+          <ArrowLeft size={30} color="#000000" />
+        </TouchableOpacity>
+
         <View style={styles.verificationContainer}>
           <Text style={styles.verificationTitle}>Account Verification</Text>
           <Text style={styles.verificationText}>
             Verify your account to continue using CHAKAM features securely.
           </Text>
           <Text style={styles.verificationEmailText}>
-            {" "}
             Enter the code sent to your email address
           </Text>
 
           {/* codes input */}
           <View style={styles.codesInputContainer}>
             {code.map((item, index) => {
-              const isDisabled = index >= code.length - 2;
-
               return (
                 <TextInput
                   key={index}
-                  value={isDisabled ? "" : item}
-                  placeholder={isDisabled ? "" : index.toString()}
+                  value={item}
+                  maxLength={1}
+                  placeholder={index.toString()}
                   keyboardType="number-pad"
-                  editable={!isDisabled}
                   ref={(el) => (inputRef.current[index] = el)}
                   style={[
                     styles.codeInput,
-                    isDisabled && styles.disabledInput,
                     {
-                      borderColor: onfocus ? "#00FB8A" : "#000000",
+                      borderColor: onfocus ? "#E5E5E5" : "#000000",
+                      backgroundColor: item ? "#00FB8A" : "#E5E5E5", // Vert si rempli, gris sinon
                     },
                   ]}
                   onFocus={() => setOnfocus(true)}
                   onBlur={() => setOnfocus(false)}
-                  onChangeText={(text) => {
-                    setCode((prev) =>
-                      prev.map((item, i) => (i === index ? text : item))
-                    );
-                    if (text && index < input_lenght - 1) {
-                      inputRef.current[index + 1]?.focus();
-                    }
-                  }}
+                  onChangeText={(text) => handleChangeText(text, index)}
+                  onKeyPress={(e) => handleKeyPress(e, index)}
                 />
               );
             })}
@@ -70,13 +126,23 @@ export default function Verification() {
 
         {/* expiration time content */}
         <View style={styles.expirationTimeContainer}>
-          <Text style={styles.expirationTimeText}>Code expires in</Text>
+          <Text style={styles.expirationTimeText}>Code expires in :</Text>
 
           {/* expiration time */}
           <View style={styles.expirationTime}>
             <Clock7 size={20} color="#000000" />
-            <Text style={styles.time}> 5:00</Text>
+            <Text style={styles.time}>{formatTime(remainingTime)}</Text>
           </View>
+
+          {/* reset button */}
+          {showResetButton && (
+            <TouchableOpacity
+              style={styles.resetButton}
+              onPress={handleResetTimer}
+            >
+              <Text style={styles.resetButtonText}>Resend Code</Text>
+            </TouchableOpacity>
+          )}
         </View>
 
         {/* verification button */}
@@ -90,80 +156,81 @@ export default function Verification() {
 
           {/* already verified */}
           <View style={styles.resetcodeContainer}>
-            <Text style={styles.resetcode}>Didn’t get a code?</Text>
-            <Text style={styles.resetcodeText}>Reset code</Text>
+            <Text style={styles.resetcode}>Didn't get a code?</Text>
+            <TouchableOpacity onPress={handleResetTimer}>
+              <Text style={styles.resetcodeText}>Resend code</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
-    </>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#ffffff",
-    padding: 20,
+    paddingHorizontal: "10@ms",
   },
 
   verificationContainer: {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    padding: 20,
+    padding: "10@ms",
   },
   verificationTitle: {
-    fontSize: 32,
-    width: 355,
+    fontSize: "32@ms",
+    width: "355@ms",
     fontWeight: "600",
-    lineHeight: 20,
+    lineHeight: " 20@ms",
     letterSpacing: 0.6,
     color: "#000000",
-    marginTop: 20,
-    padding: 10,
-    marginLeft: 20,
+    marginTop: "20@ms",
+    padding: "10@ms",
+    marginLeft: "20@ms",
   },
 
   verificationText: {
-    fontSize: 14,
+    fontSize: "14@ms",
     fontWeight: "400",
-    lineHeight: 20,
+    lineHeight: " 20@ms",
     letterSpacing: 0.5,
     color: "#000000",
-    marginTop: 15,
-    marginBottom: 5,
+    marginTop: "15@ms",
+    marginBottom: "5@ms",
   },
 
   verificationEmailText: {
-    fontSize: 14,
+    fontSize: "14@ms",
     fontWeight: "300",
-    lineHeight: 20,
+    lineHeight: " 20@ms",
     letterSpacing: 0.5,
     color: "#000000",
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop: "5@ms",
+    marginBottom: "5@ms",
   },
   codesInputContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 8,
-    marginTop: 20,
-    marginLeft: 35,
+    gap: "8@ms",
+    marginTop: "20@ms",
+    marginLeft: "35@ms",
   },
 
   codeInput: {
-    width: 49,
-    height: 47,
-    borderRadius: 16,
+    width: "49@ms",
+    height: "47@ms",
+    borderRadius: "16@ms",
     textAlign: "center",
     fontWeight: "bold",
-    fontSize: 24,
+    fontSize: "24@ms",
     color: "#000000",
     borderWidth: 1,
     borderColor: "#00FB8A",
     backgroundColor: "#00FB8A",
-    padding: 10,
+    padding: "10@ms",
   },
   disabledInput: {
     backgroundColor: "#D9D9D9",
@@ -175,62 +242,62 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    padding: 20,
-    gap: 8,
+    padding: "20@ms",
+    gap: "8@ms",
   },
   expirationTimeText: {
-    fontSize: 16,
+    fontSize: "16@ms",
     fontWeight: "bold",
-    lineHeight: 20,
+    lineHeight: " 20@ms",
     letterSpacing: 0.5,
     color: "#000000",
-    marginBottom: 5,
+    marginBottom: "5@ms",
   },
   expirationTime: {
     flexDirection: "row",
-    gap: 5,
-    fontSize: 16,
-    height: 27,
-    padding: 2,
-    width: 86,
+    gap: "5@ms",
+    fontSize: "16@ms",
+    height: "27@ms",
+    padding: "2@ms",
+    width: "86@ms",
     alignItems: "center",
     justifyContent: "center",
     fontWeight: "bold",
     backgroundColor: "#8A8A8A2E",
-    borderRadius: 23,
-    lineHeight: 20,
+    borderRadius: "23@ms",
+    lineHeight: " 20@ms",
     letterSpacing: 0.5,
     color: "#000000",
   },
 
   time: {
-    fontSize: 16,
+    fontSize: "16@ms",
     fontWeight: "bold",
-    lineHeight: 20,
+    lineHeight: " 20@ms",
     letterSpacing: 0.5,
     color: "#000000",
   },
 
   verificationButtonContainer: {
-    marginTop: 200,
+    marginTop: "200@ms",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    padding: 20,
+    padding: "20@ms",
   },
   verificationButton: {
     backgroundColor: "#00FB8A",
-    borderRadius: 33,
-    padding: 10,
-    width: 161,
-    height: 50,
+    borderRadius: "33@ms",
+    padding: "10@ms",
+    width: "161@ms",
+    height: "50@ms",
     alignItems: "center",
     justifyContent: "center",
   },
   verificationButtonText: {
-    fontSize: 16,
+    fontSize: "16@ms",
     fontWeight: "bold",
-    lineHeight: 20,
+    lineHeight: "20@ms",
     letterSpacing: 0.5,
     color: "#000000",
   },
@@ -239,25 +306,29 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 8,
-    marginTop: 5,
+    gap: "8@ms",
+    marginTop: "5@ms",
   },
 
   resetcode: {
-    fontSize: 14,
+    fontSize: "14@ms",
     fontWeight: "bold",
-    lineHeight: 20,
+    lineHeight: "20@ms",
     letterSpacing: 0.5,
     color: "#000000",
     marginTop: 5,
-    marginBottom: 5,
+    marginBottom: "5@ms",
   },
   resetcodeText: {
-    fontSize: 16,
+    fontSize: "16@ms",
     fontWeight: "bold",
-    lineHeight: 20,
+    lineHeight: "20@ms",
     letterSpacing: 0.5,
     color: "#01723F",
     textDecorationLine: "underline",
+  },
+  backIcone: {
+    paddingHorizontal: "10@ms",
+    alignSelf: "flex-start",
   },
 });
