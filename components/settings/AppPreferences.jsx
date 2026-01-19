@@ -1,11 +1,25 @@
+import { useTheme } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { ArrowLeft } from "lucide-react-native";
+import { useMemo, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+import RadioGroup from "react-native-radio-buttons-group";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScaledSheet } from "react-native-size-matters";
 
 export default function AppPreferencesComponent() {
+  const radioButtons = useMemo(
+    () => [
+      { id: "1", label: "Option A", value: "a", color: "#00FB8A" },
+      { id: "2", label: "Option B", value: "b", color: "#00FB8A" },
+    ],
+    [],
+  );
+  const [selected, setSelected] = useState("1");
+
+  const { themeMode, setThemeMode, systemTheme, theme } = useTheme();
+
   const router = useRouter();
   return (
     <SafeAreaView style={styles.container}>
@@ -39,6 +53,15 @@ export default function AppPreferencesComponent() {
         <TouchableOpacity style={styles.buttonDark}>
           <Text style={styles.buttonDarkText}>Dark Mode</Text>
         </TouchableOpacity>
+      </View>
+
+      {/* Radio buttons */}
+      <View style={styles.radioContainer}>
+        <RadioGroup
+          radioButtons={radioButtons}
+          selectedButtonId="1"
+          onPress={(id) => console.log(id)}
+        />
       </View>
     </SafeAreaView>
   );
@@ -111,5 +134,11 @@ const styles = ScaledSheet.create({
     height: "40@ms",
     alignItems: "center",
     justifyContent: "center",
+  },
+  radioContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "20@ms",
   },
 });
