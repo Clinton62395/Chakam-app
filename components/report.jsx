@@ -12,7 +12,6 @@ import { useState } from "react";
 import { Calendar } from "react-native-calendars";
 import { ScaledSheet } from "react-native-size-matters";
 
-
 export default function ReportComponent() {
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0],
@@ -40,7 +39,7 @@ export default function ReportComponent() {
         <TouchableOpacity onPress={() => router.back()}>
           <ChevronLeft
             size={24}
-            color={themeMode === "dark" ? theme.text : theme.backround}
+            color={themeMode === "dark" ? theme.text : theme.background}
             strokeWidth={2}
           />
         </TouchableOpacity>
@@ -80,7 +79,7 @@ export default function ReportComponent() {
         {/* icone */}
         <ChevronLeft
           size={24}
-          color={themeMode === "dark" ? theme.text : theme.backround}
+          color={themeMode === "dark" ? theme.text : theme.background}
         />
         <TouchableOpacity onPress={() => setShowCalendar(!showCalendar)}>
           <Text style={styles.viewAllText}>
@@ -93,7 +92,7 @@ export default function ReportComponent() {
         </TouchableOpacity>
         <ChevronRight
           size={24}
-          color={themeMode === "dark" ? theme.text : theme.backround}
+          color={themeMode === "dark" ? theme.text : theme.background}
         />
       </View>
 
@@ -109,11 +108,11 @@ export default function ReportComponent() {
         {reports.map((report, index) => {
           const Icon = report.icon;
           return (
-            <View key={index} style={styles.listItem}>
+            <TouchableOpacity key={index} style={styles.listItem}>
               <View style={styles.listLeft}>
                 <Icon
                   size={18}
-                  color={themeMode === "dark" ? theme.text : theme.backround}
+                  color={themeMode === "dark" ? theme.text : theme.background}
                 />
                 <View>
                   <Text style={styles.listTitle}>{report.title}</Text>
@@ -124,7 +123,7 @@ export default function ReportComponent() {
               </View>
 
               <Text style={styles.resolved}>{report.status}</Text>
-            </View>
+            </TouchableOpacity>
           );
         })}
       </View>

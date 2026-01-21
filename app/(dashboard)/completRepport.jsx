@@ -50,15 +50,7 @@ export default function CompletedReportScreen() {
   return (
     <>
       <SafeAreaView style={styles.container}>
-        <View
-          style={[
-            styles.staticContent,
-            {
-              backgroundColor:
-                themeMode === "dark" ? theme.backround : theme.text,
-            },
-          ]}
-        >
+        <View style={[styles.staticContent]}>
           {/* blur on header  content*/}
           <BlurView
             intensity={30}
@@ -93,7 +85,7 @@ export default function CompletedReportScreen() {
                       styles.badgeText,
                       {
                         color:
-                          themeMode === "dark" ? theme.text : theme.backround,
+                          themeMode === "dark" ? theme.text : theme.background,
                       },
                     ]}
                   >
@@ -112,7 +104,7 @@ export default function CompletedReportScreen() {
           </View>
           {/* make a report button */}
           <TouchableOpacity
-            onpress={() => router.push("(auth)/submitReport")}
+            // onpress={() => router.push("(auth)/submitReport")}
             style={[
               styles.actionButton,
               {
@@ -124,7 +116,7 @@ export default function CompletedReportScreen() {
             <Text style={styles.buttonText}>Make a report</Text>
             <Pen
               size={20}
-              color={themeMode === "dark" ? theme.text : theme.backround}
+              color={themeMode === "dark" ? theme.text : theme.background}
             />
           </TouchableOpacity>
         </View>
