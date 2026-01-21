@@ -10,7 +10,7 @@ import {
   User,
 } from "lucide-react-native";
 import { StyleSheet } from "react-native";
-import { Card, Text, TouchableOpacity, View } from "../theme/ModeHandler";
+import { Card, Text, TouchableOpacity, View } from "@/components/theme/ModeHandler";
 
 export default function SettingsComponent() {
   const { themeMode } = useMode();

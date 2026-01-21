@@ -1,122 +1,136 @@
+import {
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "@/components/theme/ModeHandler";
+import { useMode } from "@/components/theme/themeProvider";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
+import { ImageBackground } from "react-native";
+import { ScaledSheet } from "react-native-size-matters";
 export default function Index() {
   const router = useRouter();
+
+  const { themeMode, theme } = useMode();
+
+  const content = (
+    <>
+      <View>
+        <View style={styles.bottomImageTextContainer}>
+          <Text style={styles.title}>Welcome to Chakam </Text>
+          <Text style={styles.reportText}>Report • Share • Stay Safe</Text>
+          <TouchableOpacity
+            onPress={() => router.push("register")}
+            style={[
+              styles.continuBtn,
+              {
+                backgroundColor:
+                  themeMode === "dark" ? theme.card : theme.primary,
+              },
+            ]}
+          >
+            <Text style={styles.buttonText}>Continue</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </>
+  );
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={[styles.container]}>
       {/* Partie haute */}
       <View style={styles.top}>
         <Image
-          source={require("../assets/images/logo.png")}
+          source={require("@/assets/images/logo.png")}
           style={styles.logo}
         />
       </View>
 
       {/* Partie basse */}
-      <ImageBackground
-        source={require("../assets/images/wecomepage.png")}
-        style={styles.bottom}
-        resizeMode="cover"
-        imageStyle={{ resizeMode: "stretch" }}
-        
-      >
-        <View>
-          <View style={styles.bottomImageTextContainer}>
-            <Text style={styles.welcomTexte}>Welcome to Chakam </Text>
-            <Text style={styles.reportText}>Report • Share • Stay Safe</Text>
-            <TouchableOpacity
-              onPress={() => router.push("register")}
-              style={styles.continuBtn}
-            >
-              <Text style={styles.buttonText}>Continue</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ImageBackground>
-    </View>
+      {themeMode === "light" ? (
+        <>
+          <ImageBackground
+            source={require("@/assets/images/wecomepage.png")}
+            style={styles.bottom}
+            resizeMode="cover"
+            imageStyle={{ resizeMode: "stretch" }}
+          >
+            {content}
+          </ImageBackground>
+        </>
+      ) : (
+        <>{content}</>
+      )}
+    </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#00FB8A",
+    padding: "20@ms",
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   top: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
 
   bottom: {
-    flex: 2,
-    
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
     position: "relative",
-    width: "100%",
   },
 
   logo: {
-    width: 80,
-    height: 88,
-  },
-
-  bottomImage: {
-    position: "absolute",
-    left: 0,
-    width: "100%",
-    height: "100%",
+    width: "80@ms",
+    height: "88@ms",
   },
 
   bottomImageTextContainer: {
-    marginTop: 200,
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
-    padding: 20,
   },
 
-  welcomTexte: {
-    fontSize: 30,
-    letterSpacing: 0.5,
-    lineHeight: 20,
-    fontWeight: "800",
-    color: "#FFFFFF",
+  title: {
+    fontSize: "32@ms",
+    height: "30@vs",
+    alignSelf: "center",
+    paddingTop: "10@ms",
+    letterSpacing: "-0.5@ms",
+    lineHeight: "20@ms",
+    fontWeight: "700",
+    marginTop: "100@vs",
   },
 
   reportText: {
-    fontSize: 16,
-    color: "#ffffff",
-    letterSpacing: 0.5,
-    lineHeight: 20,
+    fontSize: "16@ms",
+    letterSpacing: "0.5@ms",
+    lineHeight: "20@ms",
     fontWeight: "400",
-    marginTop: 10,
+    marginTop: "5@vs",
   },
 
   continuBtn: {
-    marginTop: 60,
-    backgroundColor: "#00FB8A",
-    borderRadius: 33,
-    padding: 10,
-    width: 171,
-    height: 50,
+    marginTop: "60@vs",
+    borderRadius: "33@ms",
+    padding: "10@ms",
+    width: "171@ms",
+    height: "50@vs",
     alignItems: "center",
     justifyContent: "center",
   },
 
-//   button: {
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-
   buttonText: {
-    fontSize: 16,
+    fontSize: "16@ms",
     fontWeight: "bold",
-    lineHeight: 20,
-    letterSpacing: 0.5,
-    color: "#000000",
+    lineHeight: "20@ms",
+    letterSpacing: "0.5@ms",
   },
 
   footer: {
@@ -127,6 +141,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
-    padding: 20,
+    padding: "20@ms",
   },
 });

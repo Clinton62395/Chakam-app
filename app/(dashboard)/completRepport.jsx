@@ -1,10 +1,19 @@
+import {
+  Card,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "@/components/theme/ModeHandler";
 import { BlurView } from "expo-blur";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { Bell, Check, Pen } from "lucide-react-native";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
+import { useMode } from "@/components/theme/themeProvider";
+import { ScaledSheet } from "react-native-size-matters";
 export default function CompletedReportScreen() {
+  const { themeMode, theme } = useMode();
   const count = 3;
   const router = useRouter();
 
@@ -12,28 +21,44 @@ export default function CompletedReportScreen() {
     {
       text: "Leaking pipe ",
       date: "(Date : 13/03/2026)",
-      icon: <Check size={20} color="#000000" />,
+      icon: (
+        <Check size={20} color={themeMode === "dark" ? "#FFFFFF" : "#000000"} />
+      ),
     },
     {
       text: "Leaking pipe ",
       date: "(Date : 13/03/2026)",
-      icon: <Check size={20} color="#000000" />,
+      icon: (
+        <Check size={20} color={themeMode === "dark" ? "#FFFFFF" : "#000000"} />
+      ),
     },
     {
       text: "Leaking pipe ",
       date: "(Date : 13/03/2026)",
-      icon: <Check size={20} color="#000000" />,
+      icon: (
+        <Check size={20} color={themeMode === "dark" ? "#FFFFFF" : "#000000"} />
+      ),
     },
     {
       text: "Leaking pipe ",
       date: "(Date : 13/03/2026)",
-      icon: <Check size={20} color="#000000" />,
+      icon: (
+        <Check size={20} color={themeMode === "dark" ? "#FFFFFF" : "#000000"} />
+      ),
     },
   ];
   return (
     <>
-      <View style={styles.container}>
-        <View style={styles.staticContent}>
+      <SafeAreaView style={styles.container}>
+        <View
+          style={[
+            styles.staticContent,
+            {
+              backgroundColor:
+                themeMode === "dark" ? theme.backround : theme.text,
+            },
+          ]}
+        >
           {/* blur on header  content*/}
           <BlurView
             intensity={30}
@@ -42,17 +67,38 @@ export default function CompletedReportScreen() {
           />{" "}
           <View style={styles.header}>
             <Image
-              source={require("../../assets/images/dash-logo.png")}
+              source={require("@/assets/images/dash-logo.png")}
               style={styles.logo}
               contentFit="contain"
             />
 
             <View style={styles.notificationWrapper}>
-              <Bell size={22} color="#000000" />
+              <Bell
+                size={22}
+                color={themeMode === "dark" ? theme.text : theme.primary}
+              />
 
               {count > 0 && (
-                <View style={styles.badge}>
-                  <Text style={styles.badgeText}>{count}</Text>
+                <View
+                  style={[
+                    styles.badge,
+                    {
+                      backgroundColor:
+                        themeMode === "dark" ? theme.text : theme.primary,
+                    },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.badgeText,
+                      {
+                        color:
+                          themeMode === "dark" ? theme.text : theme.backround,
+                      },
+                    ]}
+                  >
+                    {count}
+                  </Text>
                 </View>
               )}
             </View>
@@ -65,9 +111,21 @@ export default function CompletedReportScreen() {
             </Text>
           </View>
           {/* make a report button */}
-          <TouchableOpacity style={styles.actionButton}>
+          <TouchableOpacity
+            onpress={() => router.push("(auth)/submitReport")}
+            style={[
+              styles.actionButton,
+              {
+                backgroundColor:
+                  themeMode === "dark" ? theme.card : theme.primary,
+              },
+            ]}
+          >
             <Text style={styles.buttonText}>Make a report</Text>
-            <Pen size={20} color="#000000" />
+            <Pen
+              size={20}
+              color={themeMode === "dark" ? theme.text : theme.backround}
+            />
           </TouchableOpacity>
         </View>
 
@@ -76,81 +134,85 @@ export default function CompletedReportScreen() {
           <Text style={styles.title}>Completed Requests</Text>
 
           {completedActions.map((action, index) => (
-            <View key={index} style={styles.actionCompleted}>
+            <Card key={index} style={styles.actionCompleted}>
               <Text style={styles.buttonText}>{action.text}</Text>
               <Text style={styles.date}>{action.date}</Text>
-              <Text style={styles.completIcone}> {action.icon}</Text>
-            </View>
+              <View
+                style={[
+                  styles.completIcone,
+                  {
+                    backgroundColor:
+                      themeMode === "dark" ? theme.card : theme.primary,
+                  },
+                ]}
+              >
+                {" "}
+                {action.icon}
+              </View>
+            </Card>
           ))}
         </View>
-      </View>
+      </SafeAreaView>
     </>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
-    alignItems: "center",
-    padding: 20,
+    padding: "20@ms",
+    position: "relative",
+    zIndex: 2,
   },
+
   dashboardContent: {
     width: "100%",
-    gap: 15,
+    gap: "15@ms",
   },
-  dashboardButonsContainer: {
-    width: "100%",
-    justifyContent: "space-between",
-    marginTop: 50,
-    gap: 20,
-  },
+
   title: {
-    width: 355,
-    fontSize: 32,
+    width: "355@s",
+    height: "51@vs",
+    fontSize: "32@ms",
     fontWeight: "bold",
-    lineHeight: 20,
+    lineHeight: "20@vs",
     letterSpacing: 0.6,
-    color: "#000000",
-    marginTop: 20,
-    padding: 10,
+    marginTop: "20@vs",
+    padding: "10@ms",
   },
+
   subtitle: {
-    fontSize: 14,
+    fontSize: "14@ms",
     fontWeight: "bold",
-    lineHeight: 20,
+    lineHeight: "20@vs",
     letterSpacing: 0.5,
-    color: "#000000",
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop: "5@vs",
+    marginBottom: "5@vs",
   },
 
   logo: {
-    width: 58,
-    height: 67,
+    width: "58@s",
+    height: "67@vs",
   },
 
   actionButton: {
     alignSelf: "center",
     width: "100%",
-    height: 99,
-    backgroundColor: "#00FF8C",
-    borderRadius: 16,
-    paddingHorizontal: 20,
+    height: "99@vs",
+    borderRadius: "16@ms",
+    paddingHorizontal: "20@ms",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
 
-  // header
+  /* ---------- Header ---------- */
 
   header: {
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 40,
-    zIndex: 2,
   },
 
   notificationWrapper: {
@@ -159,72 +221,64 @@ const styles = StyleSheet.create({
 
   badge: {
     position: "absolute",
-    top: -6,
-    right: -6,
-    backgroundColor: "#00FB8A",
-    width: 18,
-    height: 18,
-    borderRadius: 9,
+    top: "-6@vs",
+    right: "-6@s",
+    width: "18@ms",
+    height: "18@ms",
+    borderRadius: "9@ms",
     alignItems: "center",
     justifyContent: "center",
   },
 
   badgeText: {
-    color: "#000",
-    fontSize: 10,
+    fontSize: "10@ms",
     fontWeight: "bold",
   },
+
   buttonText: {
-    fontSize: 16,
+    fontSize: "16@ms",
     fontWeight: "bold",
-    lineHeight: 20,
+    lineHeight: "20@vs",
     letterSpacing: 0.5,
-    color: "#000000",
-    marginLeft: 10,
+    marginLeft: "10@s",
   },
 
   actionCompleted: {
     width: "100%",
-    height: 65,
-    backgroundColor: "#DADADA",
-    borderRadius: 17,
-    padding: 10,
+    borderRadius: "17@ms",
+    padding: "10@ms",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    gap: 20,
+    justifyContent: "center",
+    gap: "10@ms",
   },
 
   date: {
-    fontSize: 14,
+    fontSize: "14@ms",
     fontWeight: "bold",
-    lineHeight: 20,
+    lineHeight: "20@vs",
     letterSpacing: 0.5,
-    color: "#000000",
-    marginTop: 5,
-    marginBottom: 5,
+    marginBottom: "5@vs",
   },
 
   completIcone: {
     alignItems: "center",
     justifyContent: "center",
-    width: 24,
-    height: 24,
-    // fontSize: 16,
+    width: "24@ms",
+    height: "24@ms",
     fontWeight: "bold",
-    color: "#000000",
-    backgroundColor: "#ffffff",
   },
+
   staticContent: {
     position: "relative",
   },
+
   headerBlur: {
     position: "absolute",
     top: 0,
-      backgroundColor: "rgba(255,255,255,0.4)",
     left: 0,
     width: "100%",
-    height: 120,
+    height: "120@vs",
     zIndex: 1,
   },
 });

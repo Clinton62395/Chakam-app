@@ -1,4 +1,5 @@
 import {
+  SafeAreaView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -11,18 +12,27 @@ import { ImageBackground } from "react-native";
 import { ScaledSheet } from "react-native-size-matters";
 
 export default function RegisterComponent() {
+  const { themeMode, theme } = useMode();
+
   const content = (
     <>
       {/* text Input */}
       <View style={styles.signUpContainer}>
-        <Text style={styles.signUpText}>Sign-Up</Text>
+        <Text
+          style={[
+            styles.signUpText,
+            { color: themeMode === "dark" ? theme.text : theme.primary },
+          ]}
+        >
+          Sign-Up
+        </Text>
 
         <View style={styles.googleIconeContainer}>
           {/* google icone */}
           <Image
             source={require("@/assets/images/google-logo.png")}
             style={styles.googleIcon}
-            resizeMode="contain"
+            contentFit="contain"
           />
           <Text style={styles.googleSignupText}>Sign Up width google</Text>
         </View>
@@ -33,7 +43,9 @@ export default function RegisterComponent() {
         <TextInput
           style={styles.textInput}
           placeholder="Enter your email address"
-          placeholderTextColor="#000000"
+          placeholderTextColor={
+            themeMode === "dark" ? theme.text : theme.backround
+          }
           autoCapitalize="none"
           keyboardType="email-address"
         />
@@ -41,7 +53,9 @@ export default function RegisterComponent() {
         <TextInput
           style={styles.textInput}
           placeholder="Enter your password"
-          placeholderTextColor="#000000"
+          placeholderTextColor={
+            themeMode === "dark" ? theme.text : theme.backround
+          }
           autoCapitalize="none"
           secureTextEntry={true}
           keyboardType="email-address"
@@ -51,7 +65,13 @@ export default function RegisterComponent() {
       {/* bouton */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          style={styles.button}
+          style={[
+            styles.button,
+            {
+              backgroundColor:
+                themeMode === "dark" ? theme.card : theme.primary,
+            },
+          ]}
           onPress={() => router.push("verification")}
         >
           <Text style={styles.buttonText}>Sign-up</Text>
@@ -68,15 +88,9 @@ export default function RegisterComponent() {
       </View>
     </>
   );
-  const { themeMode } = useMode();
   const router = useRouter();
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: themeMode === "dark" ? "#000000" : "#00FB8A" },
-      ]}
-    >
+    <SafeAreaView style={[styles.container]}>
       <View>
         {/* logo */}
         <Image
@@ -97,7 +111,7 @@ export default function RegisterComponent() {
       ) : (
         <>{content}</>
       )}
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -128,12 +142,10 @@ const styles = ScaledSheet.create({
   textInput: {
     width: 358,
     height: 50,
-    backgroundColor: "#FFFFFF",
     borderRadius: 20,
     marginright: 13,
     marginleft: 13,
     borderWidth: 1,
-    borderColor: "#000000",
     padding: 10,
   },
   buttonContainer: {
@@ -143,7 +155,6 @@ const styles = ScaledSheet.create({
     padding: 20,
   },
   button: {
-    backgroundColor: "#00FB8A",
     borderRadius: 33,
     padding: 10,
     width: 161,
@@ -219,7 +230,6 @@ const styles = ScaledSheet.create({
     fontWeight: "bold",
     lineHeight: 20,
     letterSpacing: 0.5,
-    color: "#00FB8A",
     textdecorationLine: "underline",
   },
 

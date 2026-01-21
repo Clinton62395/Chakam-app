@@ -1,13 +1,14 @@
+import {
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "@/components/theme/ModeHandler";
 import { useMode } from "@/components/theme/themeProvider";
 import { useResponsive } from "@/components/ui/media";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { ImageBackground, StyleSheet } from "react-native";
-import {
-  Text,
-  TouchableOpacity,
-  View,
-} from "../../components/theme/ModeHandler";
 
 export default function VerifySuccess() {
   const router = useRouter();
@@ -15,7 +16,7 @@ export default function VerifySuccess() {
   //   media query
 
   const { isSmall } = useResponsive();
-  const { themeMode } = useMode();
+  const { themeMode, theme } = useMode();
   const content = (
     <>
       {/* text */}
@@ -28,7 +29,13 @@ export default function VerifySuccess() {
 
         {/* button */}
         <TouchableOpacity
-          style={styles.button}
+          style={[
+            styles.button,
+            {
+              backgroundColor:
+                themeMode === "dark" ? theme.card : theme.primary,
+            },
+          ]}
           onPress={() => router.push("submitReport")}
         >
           <Text style={styles.buttonText}>Make a report</Text>
@@ -39,12 +46,7 @@ export default function VerifySuccess() {
 
   return (
     <>
-      <View
-        style={[
-          styles.container,
-          { backgroundColor: themeMode === "dark" ? "#000000" : "#00FB8A" },
-        ]}
-      >
+      <SafeAreaView style={[styles.container]}>
         {/* logo */}
         <Image
           source={require("@/assets/images/logo.png")}
@@ -73,7 +75,7 @@ export default function VerifySuccess() {
             <>{content}</>
           )}
         </View>
-      </View>
+      </SafeAreaView>
     </>
   );
 }
@@ -128,7 +130,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   button: {
-    backgroundColor: "#00FB8A",
     borderRadius: 33,
     width: 206,
     height: 50,

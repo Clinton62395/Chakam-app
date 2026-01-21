@@ -1,11 +1,17 @@
 import { reports, stats } from "@/components/services/reportsContents";
+import {
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "@/components/theme/ModeHandler";
 import { useMode } from "@/components/theme/themeProvider";
 import { useRouter } from "expo-router";
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
 import { useState } from "react";
-import { StyleSheet } from "react-native";
 import { Calendar } from "react-native-calendars";
-import { Text, TouchableOpacity, View } from "./theme/ModeHandler";
+import { ScaledSheet } from "react-native-size-matters";
+
 
 export default function ReportComponent() {
   const [selectedDate, setSelectedDate] = useState(
@@ -13,7 +19,7 @@ export default function ReportComponent() {
   );
   const [showCalendar, setShowCalendar] = useState(false);
   const router = useRouter();
-  const { themeMode } = useMode();
+  const { themeMode, theme } = useMode();
 
   //   calender
 
@@ -28,13 +34,13 @@ export default function ReportComponent() {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
           <ChevronLeft
             size={24}
-            color={themeMode === "dark" ? "#FFFFFF" : "#000000"}
+            color={themeMode === "dark" ? theme.text : theme.backround}
             strokeWidth={2}
           />
         </TouchableOpacity>
@@ -74,7 +80,7 @@ export default function ReportComponent() {
         {/* icone */}
         <ChevronLeft
           size={24}
-          color={themeMode === "dark" ? "#FFFFFF" : "#000000"}
+          color={themeMode === "dark" ? theme.text : theme.backround}
         />
         <TouchableOpacity onPress={() => setShowCalendar(!showCalendar)}>
           <Text style={styles.viewAllText}>
@@ -87,7 +93,7 @@ export default function ReportComponent() {
         </TouchableOpacity>
         <ChevronRight
           size={24}
-          color={themeMode === "dark" ? "#FFFFFF" : "#000000"}
+          color={themeMode === "dark" ? theme.text : theme.backround}
         />
       </View>
 
@@ -107,7 +113,7 @@ export default function ReportComponent() {
               <View style={styles.listLeft}>
                 <Icon
                   size={18}
-                  color={themeMode === "dark" ? "#FFFFFF" : "#000000"}
+                  color={themeMode === "dark" ? theme.text : theme.backround}
                 />
                 <View>
                   <Text style={styles.listTitle}>{report.title}</Text>
@@ -122,15 +128,15 @@ export default function ReportComponent() {
           );
         })}
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 50,
+    paddingHorizontal: "20@s",
+    paddingTop: "50@vs",
   },
 
   /* Header */
@@ -138,12 +144,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     alignSelf: "flex-start",
-    gap: 10,
-    marginBottom: 20,
-    marginTop: 20,
+    gap: "10@ms",
+    marginBottom: "20@vs",
+    marginTop: "20@vs",
   },
+
   headerTitle: {
-    fontSize: 22,
+    fontSize: "22@ms",
     fontWeight: "700",
   },
 
@@ -152,29 +159,35 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     alignSelf: "center",
-    gap: 4,
-    marginBottom: 25,
+    gap: "4@ms",
+    marginBottom: "25@vs",
   },
+
   statCard: {
-    width: 117,
-    height: 97,
-    borderRadius: 16,
-    paddingVertical: 20,
+    width: "117@s",
+    height: "97@vs",
+    borderRadius: "16@ms",
+    paddingVertical: "20@vs",
     alignItems: "center",
   },
+
   statCardActive: {
     backgroundColor: "#00FB8A",
   },
+
   statValue: {
-    fontSize: 20,
+    fontSize: "20@ms",
     fontWeight: "700",
   },
+
   statValueActive: {},
+
   statLabel: {
-    fontSize: 12,
-    marginTop: 4,
+    fontSize: "12@ms",
+    marginTop: "4@vs",
     textAlign: "center",
   },
+
   statLabelActive: {
     color: "#000",
   },
@@ -183,70 +196,80 @@ const styles = StyleSheet.create({
   calendarHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 10,
+    marginBottom: "10@vs",
   },
+
   sectionTitle: {
-    fontSize: 16,
+    fontSize: "16@ms",
     fontWeight: "700",
   },
+
   viewAll: {
     flexDirection: "row",
     width: "100%",
-    paddingVertical: 10,
-    paddingHorizontal: 16,
+    paddingVertical: "10@vs",
+    paddingHorizontal: "16@s",
     justifyContent: "space-between",
     alignItems: "center",
-    borderRadius: 8,
-    marginBottom: 10,
+    borderRadius: "8@ms",
+    marginBottom: "10@vs",
   },
+
   viewAllText: {
-    fontSize: 16,
+    fontSize: "16@ms",
     fontWeight: "500",
   },
+
   monthSelector: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    borderRadius: 20,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    marginBottom: 20,
+    borderRadius: "20@ms",
+    paddingHorizontal: "20@s",
+    paddingVertical: "10@vs",
+    marginBottom: "20@vs",
   },
+
   monthText: {
-    fontSize: 14,
+    fontSize: "14@ms",
     fontWeight: "600",
   },
 
   /* List */
   list: {
-    gap: 16,
+    gap: "16@ms",
   },
+
   listItem: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
+
   listLeft: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 12,
+    gap: "12@ms",
   },
+
   listTitle: {
-    fontSize: 14,
+    fontSize: "14@ms",
     fontWeight: "600",
   },
+
   listSub: {
-    fontSize: 12,
+    fontSize: "12@ms",
   },
+
   resolved: {
-    fontSize: 12,
+    fontSize: "12@ms",
     color: "#00A870",
     fontWeight: "600",
   },
 
   calendarContainer: {
-    marginTop: 20,
-    marginBottom: 20,
-    paddingHorizontal: 20,
+    marginTop: "20@vs",
+    marginBottom: "20@vs",
+    paddingHorizontal: "20@s",
   },
 });

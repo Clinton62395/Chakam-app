@@ -1,12 +1,12 @@
 import { useMode } from "@/components/theme/themeProvider";
 import {
-  SafeAreaView as RNSafeAreaView,
   ScrollView as RNScrollView,
   Text as RNText,
   TextInput as RNTextInput,
   TouchableOpacity as RNTouchableOpacity,
   View as RNView,
 } from "react-native";
+import { SafeAreaView as RNSafeAreaView } from "react-native-safe-area-context";
 
 // Text avec thème automatique
 export function Text({ style, ...props }) {

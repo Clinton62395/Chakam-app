@@ -1,16 +1,19 @@
+import { Text, TouchableOpacity, View } from "@/components/theme/ModeHandler";
+import { useMode } from "@/components/theme/themeProvider";
+import { useResponsive } from "@/components/ui/media";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useResponsive } from "../../components/ui/media";
+import { ScaledSheet } from "react-native-size-matters";
 
 export default function SuccessScreen() {
   const { isSmall } = useResponsive();
   const router = useRouter();
+  const { themeMode, theme } = useMode();
   return (
     <View style={styles.container}>
       {/* confirme logo */}
       <Image
-        source={require("../../assets/images/confirmLogo.png")}
+        source={require("@/assets/images/confirmLogo.png")}
         style={styles.image}
       />
       {/* titile */}
@@ -25,7 +28,13 @@ export default function SuccessScreen() {
 
       {/* submit button */}
       <TouchableOpacity
-        style={styles.submitButton}
+        style={[
+          styles.submitButton,
+          {
+            backgroundColor:
+              themeMode === "dark" ? theme.background : theme.primary,
+          },
+        ]}
         onPress={() => router.replace("/(tabs)/home")}
       >
         <Text style={styles.submitButtonText}>Submit report</Text>
@@ -34,59 +43,57 @@ export default function SuccessScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
     alignItems: "center",
     justifyContent: "center",
-    padding: 20,
+    padding: "20@ms",
   },
   title: {
-    fontSize: 32,
-    pading: 10,
+    fontSize: "32@ms",
+    pading: "10@ms",
     alignSelf: "center",
-    height: 51,
-    padding: 10,
+    height: "51@ms",
+    padding: "10@ms",
     fontWeight: "bold",
-    lineHeight: 20,
+    lineHeight: "20@ms",
     letterSpacing: 0.6,
-    color: "#000000",
   },
   subtitle: {
-    fontSize: 14,
-    alignSelf: "center",
-    fontWeight: "600",
-    lineHeight: 20,
+    fontSize: "14@ms",
+    fontWeight: "400",
+    width: "343@ms",
+    lineHeight: "20@ms",
     letterSpacing: 0.5,
-    color: "#000000",
+    marginTop: "5@ms",
+    marginBottom: "5@ms",
+    alignSelf: "center",
   },
 
   content: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 50,
+    marginTop: "50@ms",
   },
   submitButton: {
-    backgroundColor: "#00FB8A",
-    borderRadius: 33,
-    width: 171,
-    height: 50,
+    borderRadius: "33@ms",
+    width: "206@ms",
+    height: "50@ms",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 200,
+    marginTop: "50@ms",
     overflow: "hidden",
   },
   submitButtonText: {
-    fontSize: 16,
+    fontSize: "16@ms",
     fontWeight: "bold",
-    lineHeight: 20,
+    lineHeight: "20@ms",
     letterSpacing: 0.5,
-    color: "#000000",
   },
   image: {
-    width: 128.75,
-    height: 132,
-    marginTop: 50,
+    width: "100@ms",
+    height: "100@ms",
+    marginTop: "50@ms",
   },
 });

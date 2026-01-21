@@ -83,7 +83,7 @@ export default function Verification() {
     }
   };
 
-  const { themeMode } = useMode();
+  const { themeMode, theme } = useMode();
   return (
     <View style={styles.container}>
       <SafeAreaView>
@@ -94,7 +94,7 @@ export default function Verification() {
         >
           <ArrowLeft
             size={30}
-            color={themeMode === "dark" ? "#FFFFFF" : "#000000"}
+            color={themeMode === "dark" ? theme.text : theme.backround}
           />
         </TouchableOpacity>
 
@@ -120,8 +120,8 @@ export default function Verification() {
                   style={[
                     styles.codeInput,
                     {
-                      borderColor: onfocus ? "#E5E5E5" : "#000000",
-                      backgroundColor: item ? "#00FB8A" : "#E5E5E5", // Vert si rempli, gris sinon
+                      borderColor: onfocus ? "#E5E5E5" : theme.text,
+                      backgroundColor: item ? "#00FB8A" : theme.text,
                     },
                   ]}
                   onFocus={() => setOnfocus(true)}
@@ -142,7 +142,7 @@ export default function Verification() {
           <Card style={styles.expirationTime}>
             <Clock7
               size={20}
-              color={themeMode === "dark" ? "#FFFFFF" : "#000000"}
+              color={themeMode === "dark" ? theme.text : theme.backround}
             />
             <Text style={styles.time}>{formatTime(remainingTime)}</Text>
           </Card>
@@ -161,7 +161,13 @@ export default function Verification() {
         {/* verification button */}
         <View style={styles.verificationButtonContainer}>
           <TouchableOpacity
-            style={styles.verificationButton}
+            style={[
+              styles.verificationButton,
+              {
+                backgroundColor:
+                  themeMode === "dark" ? theme.card : theme.primary,
+              },
+            ]}
             onPress={() => router.push("verifySuccess")}
           >
             <Text style={styles.verificationButtonText}>Verify</Text>

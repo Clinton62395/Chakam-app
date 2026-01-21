@@ -8,17 +8,18 @@ import {
   dataLocation,
   dataSeverity,
 } from "@/components/services/repportData";
-import { Image } from "expo-image";
-import { useRouter } from "expo-router";
-import { Plus } from "lucide-react-native";
-import { Dropdown } from "react-native-element-dropdown";
 import {
+  Scroolview,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-} from "../../components/theme/ModeHandler";
-import { useResponsive } from "../../components/ui/media";
+} from "@/components/theme/ModeHandler";
+import { useResponsive } from "@/components/ui/media";
+import { Image } from "expo-image";
+import { useRouter } from "expo-router";
+import { Plus } from "lucide-react-native";
+import { Dropdown } from "react-native-element-dropdown";
 export default function SubmitReportScreen() {
   const [value, setValue] = useState("");
   const [description, setDescription] = useState("");
@@ -44,11 +45,11 @@ export default function SubmitReportScreen() {
     }
     setImage(result.assets[0]);
   };
-  const { themeMode } = useMode();
+  const { themeMode, theme } = useMode();
   const router = useRouter();
   return (
     <>
-      <View style={styles.container}>
+      <Scroolview style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.content}>
           <Text style={styles.title}>Submit report</Text>
           <Text style={styles.subtitle}>
@@ -63,6 +64,10 @@ export default function SubmitReportScreen() {
           <Dropdown
             placeholder="Select category"
             data={data}
+            placeholderStyle={{
+              color: "#d9d9d9",
+              fontSize: 14,
+            }}
             labelField="label"
             valueField="value"
             value={value}
@@ -70,27 +75,31 @@ export default function SubmitReportScreen() {
             defaultValue={data[0]}
             selectedTextStyle={{
               color: themeMode === "dark" ? "#FFFFFF" : "#000000",
+              backgroundColor:
+                themeMode === "dark" ? theme.card : theme.background,
               fontSize: 16,
               fontWeight: "bold",
-              backgroundColor: themeMode === "dark" ? "#000000" : "#FFFFFF",
               borderColor: themeMode === "dark" ? "#000000" : "#FFFFFF",
             }}
             style={[
               styles.dropdown,
               {
                 width: isSmall ? 300 : 361,
-                backgroundColor: themeMode === "dark" ? "#808080" : "#00FB8A",
-                borderColor: themeMode === "dark" ? "#ffffff" : "#00FB8A",
+                backgroundColor:
+                  themeMode === "dark" ? theme.card : theme.background,
+                borderColor: themeMode === "dark" ? theme.border : theme.card,
+                color: themeMode === "dark" ? theme.text : theme.background,
               },
             ]}
             textStyle={[
               styles.dropdownText,
-              { color: themeMode === "dark" ? "#FFFFFF" : "#000000" },
+              { color: themeMode === "dark" ? theme.text : theme.background },
             ]}
             itemTextStyle={[
               styles.dropdownText,
               { color: themeMode === "dark" ? "#000000" : "#000000" },
             ]}
+            iconColor={themeMode === "dark" ? theme.text : theme.background}
           />
 
           {/* texteract input */}
@@ -101,7 +110,15 @@ export default function SubmitReportScreen() {
             numberOfLines={10}
             value={description}
             onChangeText={setDescription}
-            style={[styles.textInput, { width: isSmall ? 300 : 361 }]}
+            style={[
+              styles.textInput,
+              {
+                width: isSmall ? 300 : 361,
+                borderColor: themeMode === "dark" ? theme.border : theme.card,
+                backgroundColor:
+                  themeMode === "dark" ? theme.card : theme.background,
+              },
+            ]}
             placeholder="Brifly describe the problem"
             placeholderTextColor="#8A8A8A"
             autoCapitalize="sentences"
@@ -123,8 +140,9 @@ export default function SubmitReportScreen() {
               styles.uploadImage,
               {
                 width: isSmall ? 300 : 361,
-                backgroundColor: themeMode === "dark" ? "#808080" : "#00FB8A",
-                borderColor: themeMode === "dark" ? "#ffffff" : "#00FB8A",
+                backgroundColor:
+                  themeMode === "dark" ? theme.card : theme.background,
+                borderColor: themeMode === "dark" ? theme.border : theme.card,
               },
             ]}
             onPress={imagePicker}
@@ -135,15 +153,15 @@ export default function SubmitReportScreen() {
                 alignItems: "center",
                 justifyContent: "space-between",
                 width: "100%",
-                backgroundColor: themeMode === "dark" ? "#808080" : "",
-                borderColor: themeMode === "dark" ? "#ffffff" : "",
+                backgroundColor: themeMode === "dark" ? theme.card : "",
+                borderColor: themeMode === "dark" ? theme.border : "",
               }}
             >
               <Text style={styles.uploadImageText}>Upload image</Text>
               <Text>
                 <Plus
                   size={20}
-                  color={themeMode === "dark" ? "#FFFFFF" : "#000000"}
+                  color={themeMode === "dark" ? theme.text : theme.backround}
                 />
               </Text>
             </View>
@@ -153,6 +171,10 @@ export default function SubmitReportScreen() {
           <View>
             <Dropdown
               placeholder="Select location"
+              placeholderStyle={{
+                color: "#d9d9d9",
+                fontSize: 14,
+              }}
               data={dataLocation}
               labelField="label"
               valueField="value"
@@ -161,26 +183,31 @@ export default function SubmitReportScreen() {
               selectedTextStyle={{
                 fontSize: 16,
                 fontWeight: "bold",
-                backgroundColor: themeMode === "dark" ? "#808080" : "#FFFFFF",
-                color: themeMode === "dark" ? "#FFFFFF" : "#000000",
-                borderColor: themeMode === "dark" ? "#000000" : "#FFFFFF",
+                color: themeMode === "dark" ? theme.text : theme.background,
+                borderColor:
+                  themeMode === "dark" ? theme.text : theme.background,
               }}
               style={[
                 styles.dropdown,
                 {
                   width: isSmall ? 300 : 361,
-                  backgroundColor: themeMode === "dark" ? "#808080" : "#00FB8A",
-                  borderColor: themeMode === "dark" ? "#ffffff" : "#00FB8A",
+                  backgroundColor:
+                    themeMode === "dark" ? theme.card : theme.background,
+                  borderColor: themeMode === "dark" ? theme.border : theme.card,
+                  color: themeMode === "dark" ? theme.text : theme.background,
                 },
               ]}
               textStyle={[
                 styles.dropdownText,
-                { color: themeMode === "dark" ? "#FFFFFF" : "#000000" },
+                { color: themeMode === "dark" ? theme.text : theme.background },
               ]}
               itemTextStyle={[
                 styles.dropdownText,
-                { color: themeMode === "dark" ? "#000000" : "#000000" },
+                {
+                  color: themeMode === "dark" ? theme.background : theme.text,
+                },
               ]}
+              iconColor={themeMode === "dark" ? theme.text : theme.background}
             />
           </View>
 
@@ -188,6 +215,10 @@ export default function SubmitReportScreen() {
           <View style={styles.severitySelectContainer}>
             <Dropdown
               placeholder="Select severity level"
+              placeholderStyle={{
+                color: "#d9d9d9",
+                fontSize: 14,
+              }}
               data={dataSeverity}
               labelField="label"
               valueField="value"
@@ -196,25 +227,28 @@ export default function SubmitReportScreen() {
               selectedTextStyle={{
                 fontSize: 16,
                 fontWeight: "bold",
-                backgroundColor: themeMode === "dark" ? "#000000" : "#FFFFFF",
-                color: themeMode === "dark" ? "#FFFFFF" : "#000000",
+                backgroundColor:
+                  themeMode === "dark" ? theme.card : theme.background,
+                color: themeMode === "dark" ? theme.text : theme.background,
               }}
               style={[
                 styles.dropdown,
                 {
                   width: isSmall ? 300 : 361,
-                  backgroundColor: themeMode === "dark" ? "#808080" : "#00FB8A",
-                  borderColor: themeMode === "dark" ? "#ffffff" : "#00FB8A",
+                  backgroundColor:
+                    themeMode === "dark" ? theme.card : theme.background,
+                  borderColor: themeMode === "dark" ? theme.border : theme.card,
                 },
               ]}
               textStyle={[
                 styles.dropdownText,
-                { color: themeMode === "dark" ? "#FFFFFF" : "#000000" },
+                { color: themeMode === "dark" ? theme.text : theme.background },
               ]}
               itemTextStyle={[
                 styles.dropdownText,
-                { color: themeMode === "dark" ? "#000000" : "#000000" },
+                { color: themeMode === "dark" ? theme.background : theme.text },
               ]}
+              iconColor={themeMode === "dark" ? theme.text : theme.background}
             />
           </View>
         </View>
@@ -223,8 +257,9 @@ export default function SubmitReportScreen() {
           style={[
             styles.submitButton,
             {
-              backgroundColor: themeMode === "dark" ? "#111" : "#00FB8A",
-              borderColor: themeMode === "dark" ? "#ffffff" : "#00FB8A",
+              backgroundColor:
+                themeMode === "dark" ? theme.card : theme.primary,
+              borderColor: themeMode === "dark" ? theme.border : theme.primary,
             },
           ]}
           onPress={() =>
@@ -250,7 +285,7 @@ export default function SubmitReportScreen() {
             <Text style={styles.submitButtonText}>Submit report</Text>
           )}
         </TouchableOpacity>
-      </View>
+      </Scroolview>
     </>
   );
 }

@@ -1,7 +1,14 @@
+import {
+  Card,
+  Text,
+  TouchableOpacity,
+  View,
+} from "@/components/theme/ModeHandler";
+import { useMode } from "@/components/theme/themeProvider";
+import { useResponsive } from "@/components/ui/media";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useResponsive } from "../../components/ui/media";
+import { ScaledSheet } from "react-native-size-matters";
 
 export default function ReviewReportScreen() {
   // media query
@@ -10,7 +17,9 @@ export default function ReviewReportScreen() {
     useLocalSearchParams();
 
   const { isSmall } = useResponsive();
+  const { themeMode, theme } = useMode();
   const router = useRouter();
+
   return (
     <>
       <View style={styles.container}>
@@ -24,17 +33,17 @@ export default function ReviewReportScreen() {
         </View>
         {/*  reiview report content */}
 
-        <View style={[styles.reviewContent, { width: isSmall ? 330 : 355 }]}>
-          <View style={styles.col}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <Card style={[styles.reviewContent, { width: isSmall ? 330 : 355 }]}>
+          <Card style={styles.col}>
+            <Card style={{ flexDirection: "row", alignItems: "center" }}>
               <Text style={styles.reviewCategory}>category: </Text>
               <Text> {category}</Text>
-            </View>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+            </Card>
+            <Card style={{ flexDirection: "row", alignItems: "center" }}>
               <Text style={styles.reviewDescription}>Description :</Text>
               <Text> {description}</Text>
-            </View>
-            <View
+            </Card>
+            <Card
               style={{
                 flexDirection: "row",
                 alignItems: "center",
@@ -43,15 +52,15 @@ export default function ReviewReportScreen() {
             >
               <Text style={styles.reviewText}> Severity level :</Text>
               <Text> {severity}</Text>
-            </View>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+            </Card>
+            <Card style={{ flexDirection: "row", alignItems: "center" }}>
               <Text style={styles.reviewText}> Location :</Text>
               <Text> {location}</Text>
-            </View>
-          </View>
+            </Card>
+          </Card>
 
           {/* image */}
-          <View style={styles.col}>
+          <Card style={styles.col}>
             <Text style={styles.reviewTextImage}> Image (s)</Text>
             {image && (
               <Image
@@ -60,12 +69,15 @@ export default function ReviewReportScreen() {
                 contentFit="cover"
               />
             )}
-          </View>
-        </View>
+          </Card>
+        </Card>
 
         {/* review button */}
         <TouchableOpacity
-          style={styles.reviewButton}
+          style={[
+            styles.reviewButton,
+            { backgroundColor: themeMode === "dark" ? theme.background : theme.primary },
+          ]}
           onPress={() => router.push("success")}
         >
           <Text style={styles.reviewButtonText}>Submit report</Text>
@@ -75,60 +87,55 @@ export default function ReviewReportScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "#ffffff",
-    padding: 20,
+    padding: "20@ms",
   },
 
   reviewTitleContainer: {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 40,
-    marginBottom: 40,
+    marginTop: "40@ms",
+    marginBottom: "40@ms",
   },
   reviewTitle: {
-    fontSize: 32,
-    width: 355,
+    fontSize: "32@ms",
+    width: "355@ms",
     fontWeight: "600",
-    lineHeight: 20,
+    lineHeight: "20@ms",
     letterSpacing: 0.6,
-    color: "#000000",
-    marginTop: 20,
-    padding: 10,
-    marginLeft: 20,
+    marginTop: "20@ms",
+    padding: "10@ms",
+    marginLeft: "20@ms",
   },
 
   doubleCheck: {
-    width: 355,
-    fontSize: 14,
+    width: "355@ms",
+    fontSize: "14@ms",
     fontWeight: "400",
-    lineHeight: 20,
+    lineHeight: "20@ms",
     letterSpacing: 0.5,
-    color: "#000000",
-    marginTop: 5,
-    marginLeft: 20,
+    marginTop: "5@ms",
+    marginLeft: "20@ms",
   },
   reviewOption: {
-    width: 355,
-    marginLeft: 20,
-    fontSize: 14,
+    width: "355@ms",
+    marginLeft: "20@ms",
+    fontSize: "14@ms",
     fontWeight: "400",
-    lineHeight: 20,
+    lineHeight: "20@ms",
     letterSpacing: 0.5,
-    color: "#000000",
-    marginBottom: 5,
+    marginBottom: "5@ms",
   },
   reviewContent: {
-    height: 200,
-    borderRadius: 9,
+    height: "200@ms",
+    borderRadius: "9@ms",
     justifyContent: "space-between",
-    backgroundColor: "#D9D9D957",
     flexDirection: "row",
-    padding: 20,
+    padding: "20@ms",
   },
 
   col: {
@@ -140,74 +147,68 @@ const styles = StyleSheet.create({
   reviewText: {
     fontSize: 14,
     fontWeight: "bold",
-    lineHeight: 20,
+    lineHeight: "20@ms",
     letterSpacing: 0.5,
-    color: "#000000",
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop: "5@ms",
+    marginBottom: "5@ms",
   },
   reviewTextImage: {
-    fontSize: 16,
+    fontSize: "16@ms",
     fontWeight: "bold",
     alignSelf: "flex-end",
-    lineHeight: 20,
+    lineHeight: "20@ms",
     letterSpacing: 0.5,
-    color: "#000000",
   },
   reviewCategory: {
-    fontSize: 14,
+    fontSize: "14@ms",
     fontWeight: "bold",
-    lineHeight: 20,
+    lineHeight: "20@ms",
     letterSpacing: 0.5,
-    color: "#000000",
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop: "5@ms",
+    marginBottom: "5@ms",
   },
   reviewDescription: {
-    fontSize: 14,
+    fontSize: "14@ms",
 
     fontWeight: "bold",
-    lineHeight: 20,
+    lineHeight: "20@ms",
     letterSpacing: 0.5,
-    color: "#000000",
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop: "5@ms",
+    marginBottom: "5@ms",
   },
 
   imageContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 15,
-    marginTop: 20,
+    gap: "15@ms",
+    marginTop: "20@ms",
   },
 
   image: {
-    width: 101,
-    height: 76,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: "#000000",
-    marginTop: 10,
-    marginLeft: 50,
+    width: "101@ms",
+    height: "76@ms",
+    borderRadius: "20@ms",
+    borderWidth: "1@ms",
+
+    marginTop: "10@ms",
+    marginLeft: "50@ms",
   },
 
   reviewButton: {
-    marginTop: 100,
+    marginTop: "100@ms",
     flexDirection: "column",
     alignItems: "center",
-    backgroundColor: "#00FB8A",
-    borderRadius: 33,
-    padding: 10,
-    width: 206,
-    height: 50,
+    borderRadius: "33@ms",
+    padding: "10@ms",
+    width: "206@ms",
+    height: "50@ms",
     justifyContent: "center",
   },
   reviewButtonText: {
-    fontSize: 16,
+    fontSize: "16@ms",
     fontWeight: "bold",
-    lineHeight: 20,
+    lineHeight: "20@ms",
     letterSpacing: 0.5,
-    color: "#000000",
   },
 });

@@ -5,7 +5,7 @@ import { ScrollView } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScaledSheet } from "react-native-size-matters";
-import { Text, TextInput, TouchableOpacity, View } from "../theme/ModeHandler";
+import { Text, TextInput, TouchableOpacity, View } from "@/components/theme/ModeHandler";
 
 export default function ProfilesComponent() {
   const router = useRouter();

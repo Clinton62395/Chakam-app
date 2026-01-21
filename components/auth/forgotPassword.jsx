@@ -1,3 +1,9 @@
+import { Image } from "expo-image";
+
+import { router } from "expo-router";
+import { ArrowLeft } from "lucide-react-native";
+import { useState } from "react";
+
 import {
   SafeAreaView,
   Text,
@@ -6,67 +12,59 @@ import {
   View,
 } from "@/components/theme/ModeHandler";
 import { useMode } from "@/components/theme/themeProvider";
-import { Image } from "expo-image";
-import { router } from "expo-router";
-import { useState } from "react";
+import { useResponsive } from "@/components/ui/media";
 import { ScaledSheet } from "react-native-size-matters";
 
-export default function LoginScreenComponent() {
+export default function ForgotPasswordComponent() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { isSmall } = useResponsive();
 
   // media query
-
   const { themeMode, theme } = useMode();
+
   return (
     <SafeAreaView style={styles.container}>
       {/* logo */}
 
       <View style={styles.logoContainer}>
-        <Text style={styles.title}>Login</Text>
+        {/* go back icone */}
+        <TouchableOpacity
+          onPress={() => router.back()}
+          style={styles.backIcone}
+        >
+          <ArrowLeft
+            size={30}
+            color={themeMode === "dark" ? theme.text : theme.backround}
+          />
+        </TouchableOpacity>
         <Image
           source={require("@/assets/images/dash-logo.png")}
           style={styles.logo}
         />
       </View>
 
-      <Text style={styles.subleTitle1}>Login to your existing account.</Text>
-      <Text style={styles.subleTitle2}>Enter your details below</Text>
+      <Text style={[styles.title, { fontSize: isSmall ? 25 : 32 }]}>
+        Forgot your password?{" "}
+      </Text>
+      <Text style={styles.subleTitle1}>
+        Forgot your password? No worries! You can request another.
+      </Text>
+      <Text style={styles.subleTitle2}>
+        Input your email address to get a link.
+      </Text>
 
       {/* inputs */}
       <View style={styles.inputsContainer}>
         <Text style={styles.labelText}>Enter your email address</Text>
         <TextInput
-          style={styles.textInput}
+          style={[styles.textInput, { width: isSmall ? "100%" : "358px" }]}
           value={email}
           onChangeText={setEmail}
           placeholder="Enter your email address"
+          placeholderTextColor="#000000"
           autoCapitalize="none"
           keyboardType="email-address"
         />
-        <Text style={styles.labelText}>Enter your password</Text>
-        <TextInput
-          style={styles.textInput}
-          value={password}
-          onChangeText={setPassword}
-          placeholder="Enter your password"
-          autoCapitalize="none"
-          secureTextEntry={true}
-          keyboardType="email-address"
-        />
-        <TouchableOpacity
-          onPress={() => router.push("forgotPassword")}
-          style={styles.forgotPasswordBtn}
-        >
-          <Text
-            style={[
-              styles.forgotPasswordText,
-              { color: themeMode === "dark" ? theme.text : theme.primary },
-            ]}
-          >
-            Forgot password?
-          </Text>
-        </TouchableOpacity>
 
         {/* bouton */}
         <TouchableOpacity
@@ -78,30 +76,22 @@ export default function LoginScreenComponent() {
             },
           ]}
         >
-          <Text
-            style={[
-              styles.buttonText,
-              { color: themeMode === "dark" ? theme.text : theme.backround },
-            ]}
-          >
-            Sign-in
-          </Text>
+          <Text style={styles.buttonText}>Request link</Text>
         </TouchableOpacity>
         <View style={styles.existingAccount}>
-          <Text style={styles.alreadyAccount}>Don’t have an account? </Text>
-          <TouchableOpacity
-            onPress={() => router.push("register")}
-            style={styles.signupLink}
+          <Text style={styles.alreadyAccount}>
+            Didn’t get one? Request another
+          </Text>
+          <Text
+            style={[
+              [
+                styles.time,
+                { color: themeMode === "dark" ? theme.text : theme.primary },
+              ],
+            ]}
           >
-            <Text
-              style={[
-                styles.signupLink,
-                { color:  theme.primary },
-              ]}
-            >
-              Sign-up
-            </Text>
-          </TouchableOpacity>
+            in 2:00
+          </Text>
         </View>
       </View>
     </SafeAreaView>
@@ -111,7 +101,7 @@ export default function LoginScreenComponent() {
 const styles = ScaledSheet.create({
   container: {
     flex: 1,
-    padding: "20@ms",
+    padding: "10@ms",
   },
 
   logoContainer: {
@@ -123,17 +113,17 @@ const styles = ScaledSheet.create({
   },
 
   logo: {
-    width: "58@s",
-    height: "59@vs",
+    width: "57.5@s",
+    height: "58.5@vs",
   },
 
   title: {
-    fontSize: "32@ms",
     padding: "10@ms",
     fontWeight: "bold",
-    lineHeight: "36@vs",
+    lineHeight: "20@vs",
     letterSpacing: 0.6,
-    marginTop: "20@vs",
+    alignSelf: "center",
+    marginTop: "40@vs",
   },
 
   subleTitle1: {
@@ -148,7 +138,7 @@ const styles = ScaledSheet.create({
   subleTitle2: {
     fontSize: "12@ms",
     fontWeight: "400",
-    lineHeight: "18@vs",
+    lineHeight: "20@vs",
     letterSpacing: 0.5,
     marginLeft: "10@s",
     marginBottom: "5@vs",
@@ -164,22 +154,20 @@ const styles = ScaledSheet.create({
 
   textInput: {
     height: "51@vs",
-    width: "100%",
     borderRadius: "18@ms",
     borderWidth: 1,
-    padding: "12@ms",
-    marginBottom: "12@vs",
+    padding: "10@ms",
   },
 
   button: {
     borderRadius: "33@ms",
-    paddingVertical: "12@vs",
+    padding: "10@ms",
     width: "149@s",
     height: "50@vs",
     alignSelf: "center",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: "20@vs",
+    marginTop: "100@vs",
   },
 
   buttonText: {
@@ -187,24 +175,6 @@ const styles = ScaledSheet.create({
     fontWeight: "bold",
     lineHeight: "20@vs",
     letterSpacing: 0.5,
-  },
-
-  forgotPasswordBtn: {
-    width: "161@s",
-    height: "50@vs",
-    alignSelf: "flex-end",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    marginBottom: "10@vs",
-  },
-
-  forgotPasswordText: {
-    fontSize: "14@ms",
-    fontWeight: "bold",
-    lineHeight: "20@vs",
-    letterSpacing: 0.5,
-    marginBottom: "10@vs",
-    marginRight: "10@s",
   },
 
   existingAccount: {
@@ -223,9 +193,9 @@ const styles = ScaledSheet.create({
     letterSpacing: 0.5,
   },
 
-  signupLink: {
+  time: {
     fontSize: "14@ms",
-    fontWeight: "600",
+    fontWeight: "800",
     lineHeight: "20@vs",
     letterSpacing: 0.5,
   },
