@@ -1,15 +1,11 @@
+import { reports, stats } from "@/components/services/reportsContents";
+import { useMode } from "@/components/theme/themeProvider";
 import { useRouter } from "expo-router";
-import {
-  AlertCircle,
-  ChevronLeft,
-  ChevronRight,
-  Droplet,
-  FileText,
-  Flame,
-} from "lucide-react-native";
+import { ChevronLeft, ChevronRight } from "lucide-react-native";
 import { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { Calendar } from "react-native-calendars";
+import { Text, TouchableOpacity, View } from "./theme/ModeHandler";
 
 export default function ReportComponent() {
   const [selectedDate, setSelectedDate] = useState(
@@ -17,43 +13,7 @@ export default function ReportComponent() {
   );
   const [showCalendar, setShowCalendar] = useState(false);
   const router = useRouter();
-
-  const stats = [
-    { label: "Total reports", value: 20, active: true },
-    { label: "On-going reports", value: 5 },
-    { label: "Resolved reports", value: 15 },
-  ];
-
-  const reports = [
-    {
-      title: "Road Escalation",
-      time: "12:35 pm",
-      date: "12/03/25",
-      status: "Resolved",
-      icon: FileText,
-    },
-    {
-      title: "Damaged Wire",
-      time: "10:24 am",
-      date: "10/03/25",
-      status: "Resolved",
-      icon: AlertCircle,
-    },
-    {
-      title: "Leaking Pipe",
-      time: "14:24 pm",
-      date: "04/03/25",
-      status: "Resolved",
-      icon: Droplet,
-    },
-    {
-      title: "Flood",
-      time: "09:24 am",
-      date: "19/02/25",
-      status: "Resolved",
-      icon: Flame,
-    },
-  ];
+  const { themeMode } = useMode();
 
   //   calender
 
@@ -72,7 +32,11 @@ export default function ReportComponent() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
-          <ChevronLeft size={24} color="#000" />
+          <ChevronLeft
+            size={24}
+            color={themeMode === "dark" ? "#FFFFFF" : "#000000"}
+            strokeWidth={2}
+          />
         </TouchableOpacity>
       </View>
 
@@ -108,7 +72,10 @@ export default function ReportComponent() {
       {/* view all */}
       <View style={styles.viewAll}>
         {/* icone */}
-        <ChevronLeft size={24} color="#000000" />
+        <ChevronLeft
+          size={24}
+          color={themeMode === "dark" ? "#FFFFFF" : "#000000"}
+        />
         <TouchableOpacity onPress={() => setShowCalendar(!showCalendar)}>
           <Text style={styles.viewAllText}>
             {new Date(selectedDate).toLocaleDateString({
@@ -118,7 +85,10 @@ export default function ReportComponent() {
             }) || "March"}
           </Text>
         </TouchableOpacity>
-        <ChevronRight size={24} color="#000000" />
+        <ChevronRight
+          size={24}
+          color={themeMode === "dark" ? "#FFFFFF" : "#000000"}
+        />
       </View>
 
       {/* calendar */}
@@ -135,7 +105,10 @@ export default function ReportComponent() {
           return (
             <View key={index} style={styles.listItem}>
               <View style={styles.listLeft}>
-                <Icon size={18} color="#000" />
+                <Icon
+                  size={18}
+                  color={themeMode === "dark" ? "#FFFFFF" : "#000000"}
+                />
                 <View>
                   <Text style={styles.listTitle}>{report.title}</Text>
                   <Text style={styles.listSub}>
@@ -156,7 +129,6 @@ export default function ReportComponent() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
     paddingHorizontal: 20,
     paddingTop: 50,
   },
@@ -173,7 +145,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 22,
     fontWeight: "700",
-    color: "#000",
   },
 
   /* Stats */
@@ -187,7 +158,6 @@ const styles = StyleSheet.create({
   statCard: {
     width: 117,
     height: 97,
-    backgroundColor: "#D9D9D957",
     borderRadius: 16,
     paddingVertical: 20,
     alignItems: "center",
@@ -198,15 +168,11 @@ const styles = StyleSheet.create({
   statValue: {
     fontSize: 20,
     fontWeight: "700",
-    color: "#000",
   },
-  statValueActive: {
-    color: "#000",
-  },
+  statValueActive: {},
   statLabel: {
     fontSize: 12,
     marginTop: 4,
-    color: "#6B7280",
     textAlign: "center",
   },
   statLabelActive: {
@@ -222,7 +188,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: "700",
-    color: "#000",
   },
   viewAll: {
     flexDirection: "row",
@@ -232,19 +197,16 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     borderRadius: 8,
-    backgroundColor: "#E5E7EB",
     marginBottom: 10,
   },
   viewAllText: {
     fontSize: 16,
-    color: "#000000",
     fontWeight: "500",
   },
   monthSelector: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#F3F4F6",
     borderRadius: 20,
     paddingHorizontal: 20,
     paddingVertical: 10,
@@ -272,11 +234,9 @@ const styles = StyleSheet.create({
   listTitle: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#000",
   },
   listSub: {
     fontSize: 12,
-    color: "#6B7280",
   },
   resolved: {
     fontSize: 12,

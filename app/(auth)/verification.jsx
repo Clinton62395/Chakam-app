@@ -1,8 +1,15 @@
+import { useMode } from "@/components/theme/themeProvider";
 import { useRouter } from "expo-router";
 import { ArrowLeft, Clock7 } from "lucide-react-native";
 import { useEffect, useRef, useState } from "react";
 
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  Card,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "@/components/theme/ModeHandler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScaledSheet } from "react-native-size-matters";
 
@@ -76,15 +83,19 @@ export default function Verification() {
     }
   };
 
+  const { themeMode } = useMode();
   return (
-    <SafeAreaView style={styles.container}>
-      <View>
+    <View style={styles.container}>
+      <SafeAreaView>
         {/* go back icone */}
         <TouchableOpacity
           onPress={() => router.back()}
           style={styles.backIcone}
         >
-          <ArrowLeft size={30} color="#000000" />
+          <ArrowLeft
+            size={30}
+            color={themeMode === "dark" ? "#FFFFFF" : "#000000"}
+          />
         </TouchableOpacity>
 
         <View style={styles.verificationContainer}>
@@ -104,7 +115,7 @@ export default function Verification() {
                   key={index}
                   value={item}
                   maxLength={1}
-                  keyboardType="number-pad"
+                  keyboardType="numeric"
                   ref={(el) => (inputRef.current[index] = el)}
                   style={[
                     styles.codeInput,
@@ -128,10 +139,13 @@ export default function Verification() {
           <Text style={styles.expirationTimeText}>Code expires in :</Text>
 
           {/* expiration time */}
-          <View style={styles.expirationTime}>
-            <Clock7 size={20} color="#000000" />
+          <Card style={styles.expirationTime}>
+            <Clock7
+              size={20}
+              color={themeMode === "dark" ? "#FFFFFF" : "#000000"}
+            />
             <Text style={styles.time}>{formatTime(remainingTime)}</Text>
-          </View>
+          </Card>
 
           {/* reset button */}
           {showResetButton && (
@@ -161,14 +175,13 @@ export default function Verification() {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </View>
   );
 }
 const styles = ScaledSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
     paddingHorizontal: "10@ms",
   },
 
@@ -184,7 +197,6 @@ const styles = ScaledSheet.create({
     fontWeight: "600",
     lineHeight: " 20@ms",
     letterSpacing: 0.6,
-    color: "#000000",
     marginTop: "20@ms",
     padding: "10@ms",
     marginLeft: "20@ms",
@@ -195,7 +207,6 @@ const styles = ScaledSheet.create({
     fontWeight: "400",
     lineHeight: " 20@ms",
     letterSpacing: 0.5,
-    color: "#000000",
     marginTop: "15@ms",
     marginBottom: "5@ms",
   },
@@ -205,7 +216,6 @@ const styles = ScaledSheet.create({
     fontWeight: "300",
     lineHeight: " 20@ms",
     letterSpacing: 0.5,
-    color: "#000000",
     marginTop: "5@ms",
     marginBottom: "5@ms",
   },
@@ -233,8 +243,6 @@ const styles = ScaledSheet.create({
   },
   disabledInput: {
     backgroundColor: "#D9D9D9",
-    color: "#000000",
-    borderColor: "#D9D9D9",
   },
 
   expirationTimeContainer: {
@@ -249,7 +257,6 @@ const styles = ScaledSheet.create({
     fontWeight: "bold",
     lineHeight: " 20@ms",
     letterSpacing: 0.5,
-    color: "#000000",
     marginBottom: "5@ms",
   },
   expirationTime: {
@@ -262,11 +269,9 @@ const styles = ScaledSheet.create({
     alignItems: "center",
     justifyContent: "center",
     fontWeight: "bold",
-    backgroundColor: "#8A8A8A2E",
     borderRadius: "23@ms",
     lineHeight: " 20@ms",
     letterSpacing: 0.5,
-    color: "#000000",
   },
 
   time: {
@@ -274,7 +279,6 @@ const styles = ScaledSheet.create({
     fontWeight: "bold",
     lineHeight: " 20@ms",
     letterSpacing: 0.5,
-    color: "#000000",
   },
 
   verificationButtonContainer: {
@@ -298,7 +302,6 @@ const styles = ScaledSheet.create({
     fontWeight: "bold",
     lineHeight: "20@ms",
     letterSpacing: 0.5,
-    color: "#000000",
   },
 
   resetcodeContainer: {
@@ -314,7 +317,6 @@ const styles = ScaledSheet.create({
     fontWeight: "bold",
     lineHeight: "20@ms",
     letterSpacing: 0.5,
-    color: "#000000",
     marginTop: 5,
     marginBottom: "5@ms",
   },

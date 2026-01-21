@@ -1,7 +1,8 @@
 import { useRouter } from "expo-router";
 import { ChevronLeft } from "lucide-react-native";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView } from "react-native";
 import { ScaledSheet } from "react-native-size-matters";
+import { Text, TouchableOpacity, View } from "../theme/ModeHandler";
 
 export default function FAQComponent() {
   const router = useRouter();
@@ -51,7 +52,6 @@ export default function FAQComponent() {
 const styles = ScaledSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
     paddingTop: "10@ms",
   },
   header: {
@@ -64,7 +64,6 @@ const styles = ScaledSheet.create({
   title: {
     fontSize: "32@ms",
     fontWeight: "700",
-    color: "#000000",
     letterSpacing: -0.5,
     alignSelf: "flex-start",
     marginTop: "10@ms",
@@ -79,7 +78,6 @@ const styles = ScaledSheet.create({
   },
   faq: {
     marginBottom: "20@ms",
-    backgroundColor: "#F2F2F2",
     borderRadius: "9@ms",
     height: "135@ms",
     padding: "10@ms",
@@ -88,13 +86,11 @@ const styles = ScaledSheet.create({
     fontSize: "20@ms",
     textDecorationLine: "underline",
     fontWeight: "600",
-    color: "#000000",
     marginBottom: "5@ms",
   },
   answer: {
     fontSize: "14@ms",
     fontWeight: "400",
-    color: "#000000",
     marginBottom: "20@ms",
   },
 });

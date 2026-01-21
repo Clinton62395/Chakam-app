@@ -1,17 +1,23 @@
+import { useMode } from "@/components/theme/themeProvider";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet } from "react-native";
 
+import {
+  data,
+  dataLocation,
+  dataSeverity,
+} from "@/components/services/repportData";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { Plus } from "lucide-react-native";
 import { Dropdown } from "react-native-element-dropdown";
+import {
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "../../components/theme/ModeHandler";
 import { useResponsive } from "../../components/ui/media";
 export default function SubmitReportScreen() {
   const [value, setValue] = useState("");
@@ -22,30 +28,6 @@ export default function SubmitReportScreen() {
   const [image, setImage] = useState(null);
   const { isSmall } = useResponsive();
   // categroy of report
-  const data = [
-    { label: "Animal", value: "animal" },
-    { label: "Human", value: "human" },
-    { label: "Plant", value: "plant" },
-    { label: "Other", value: "other" },
-  ];
-  //   location data Nigeria state
-  const dataLocation = [
-    { label: "Abia", value: "abia" },
-    { label: "Adamawa", value: "adamawa" },
-    { label: "Akwa Ibom", value: "akwa-ibom" },
-    { label: "Anambra", value: "anambra" },
-    { label: "Bauchi", value: "bauchi" },
-    { label: "Bayelsa", value: "bayelsa" },
-    { label: "Benue", value: "benue" },
-    { label: "Borno", value: "borno" },
-    { label: "Cross River", value: "cross-river" },
-  ];
-  //   severity data
-  const dataSeverity = [
-    { label: "Severe", value: "height" },
-    { label: "Moderate", value: "midium" },
-    { label: "Minor", value: "low" },
-  ];
 
   //   imaage picker
 
@@ -62,7 +44,7 @@ export default function SubmitReportScreen() {
     }
     setImage(result.assets[0]);
   };
-
+  const { themeMode } = useMode();
   const router = useRouter();
   return (
     <>
@@ -87,13 +69,28 @@ export default function SubmitReportScreen() {
             onChange={(item) => setValue(item.value)}
             defaultValue={data[0]}
             selectedTextStyle={{
-              color: "#000009",
+              color: themeMode === "dark" ? "#FFFFFF" : "#000000",
               fontSize: 16,
               fontWeight: "bold",
+              backgroundColor: themeMode === "dark" ? "#000000" : "#FFFFFF",
+              borderColor: themeMode === "dark" ? "#000000" : "#FFFFFF",
             }}
-            style={[styles.dropdown, { width: isSmall ? 300 : 361 }]}
-            textStyle={styles.dropdownText}
-            itemTextStyle={styles.dropdownText}
+            style={[
+              styles.dropdown,
+              {
+                width: isSmall ? 300 : 361,
+                backgroundColor: themeMode === "dark" ? "#808080" : "#00FB8A",
+                borderColor: themeMode === "dark" ? "#ffffff" : "#00FB8A",
+              },
+            ]}
+            textStyle={[
+              styles.dropdownText,
+              { color: themeMode === "dark" ? "#FFFFFF" : "#000000" },
+            ]}
+            itemTextStyle={[
+              styles.dropdownText,
+              { color: themeMode === "dark" ? "#000000" : "#000000" },
+            ]}
           />
 
           {/* texteract input */}
@@ -122,7 +119,14 @@ export default function SubmitReportScreen() {
           {/* uplod image */}
 
           <TouchableOpacity
-            style={[styles.uploadImage, { width: isSmall ? 300 : 361 }]}
+            style={[
+              styles.uploadImage,
+              {
+                width: isSmall ? 300 : 361,
+                backgroundColor: themeMode === "dark" ? "#808080" : "#00FB8A",
+                borderColor: themeMode === "dark" ? "#ffffff" : "#00FB8A",
+              },
+            ]}
             onPress={imagePicker}
           >
             <View
@@ -131,15 +135,22 @@ export default function SubmitReportScreen() {
                 alignItems: "center",
                 justifyContent: "space-between",
                 width: "100%",
+                backgroundColor: themeMode === "dark" ? "#808080" : "",
+                borderColor: themeMode === "dark" ? "#ffffff" : "",
               }}
             >
               <Text style={styles.uploadImageText}>Upload image</Text>
-              <Plus size={20} color="#000000" />
+              <Text>
+                <Plus
+                  size={20}
+                  color={themeMode === "dark" ? "#FFFFFF" : "#000000"}
+                />
+              </Text>
             </View>
           </TouchableOpacity>
 
           {/* location select */}
-          <View style={styles.locationSelectContainer}>
+          <View>
             <Dropdown
               placeholder="Select location"
               data={dataLocation}
@@ -148,13 +159,28 @@ export default function SubmitReportScreen() {
               value={location}
               onChange={(item) => setLocation(item.value)}
               selectedTextStyle={{
-                color: "#000009",
                 fontSize: 16,
                 fontWeight: "bold",
+                backgroundColor: themeMode === "dark" ? "#808080" : "#FFFFFF",
+                color: themeMode === "dark" ? "#FFFFFF" : "#000000",
+                borderColor: themeMode === "dark" ? "#000000" : "#FFFFFF",
               }}
-              style={[styles.dropdown, { width: isSmall ? 300 : 361 }]}
-              textStyle={styles.dropdownText}
-              itemTextStyle={styles.dropdownText}
+              style={[
+                styles.dropdown,
+                {
+                  width: isSmall ? 300 : 361,
+                  backgroundColor: themeMode === "dark" ? "#808080" : "#00FB8A",
+                  borderColor: themeMode === "dark" ? "#ffffff" : "#00FB8A",
+                },
+              ]}
+              textStyle={[
+                styles.dropdownText,
+                { color: themeMode === "dark" ? "#FFFFFF" : "#000000" },
+              ]}
+              itemTextStyle={[
+                styles.dropdownText,
+                { color: themeMode === "dark" ? "#000000" : "#000000" },
+              ]}
             />
           </View>
 
@@ -168,19 +194,39 @@ export default function SubmitReportScreen() {
               value={severity}
               onChange={(item) => setSeverity(item.value)}
               selectedTextStyle={{
-                color: "#000009",
                 fontSize: 16,
                 fontWeight: "bold",
+                backgroundColor: themeMode === "dark" ? "#000000" : "#FFFFFF",
+                color: themeMode === "dark" ? "#FFFFFF" : "#000000",
               }}
-              style={[styles.dropdown, { width: isSmall ? 300 : 361 }]}
-              textStyle={styles.dropdownText}
-              itemTextStyle={styles.dropdownText}
+              style={[
+                styles.dropdown,
+                {
+                  width: isSmall ? 300 : 361,
+                  backgroundColor: themeMode === "dark" ? "#808080" : "#00FB8A",
+                  borderColor: themeMode === "dark" ? "#ffffff" : "#00FB8A",
+                },
+              ]}
+              textStyle={[
+                styles.dropdownText,
+                { color: themeMode === "dark" ? "#FFFFFF" : "#000000" },
+              ]}
+              itemTextStyle={[
+                styles.dropdownText,
+                { color: themeMode === "dark" ? "#000000" : "#000000" },
+              ]}
             />
           </View>
         </View>
-        {/* submit button */}
+        {/* submit button  backround color gray*/}
         <TouchableOpacity
-          style={styles.submitButton}
+          style={[
+            styles.submitButton,
+            {
+              backgroundColor: themeMode === "dark" ? "#111" : "#00FB8A",
+              borderColor: themeMode === "dark" ? "#ffffff" : "#00FB8A",
+            },
+          ]}
           onPress={() =>
             router.push({
               pathname: "reviewRepport",
@@ -212,7 +258,6 @@ export default function SubmitReportScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
     alignItems: "center",
     padding: 20,
   },
@@ -229,7 +274,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     lineHeight: 20,
     letterSpacing: 0.6,
-    color: "#000000",
   },
   subtitle: {
     fontSize: 14,
@@ -237,7 +281,6 @@ const styles = StyleSheet.create({
     width: 343,
     lineHeight: 20,
     letterSpacing: 0.5,
-    color: "#000000",
     marginTop: 5,
     marginBottom: 5,
   },
@@ -249,14 +292,11 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     height: 51,
-    backgroundColor: "#D9D9D957",
     borderRadius: 7,
     borderWidth: 0.5,
-    borderColor: "#D9D9D957",
     padding: 10,
   },
   uploadImage: {
-    backgroundColor: "#D9D9D9",
     borderRadius: 7,
     padding: 10,
     width: 161,
@@ -270,14 +310,12 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     lineHeight: 20,
     letterSpacing: 0.5,
-    color: "#000000",
   },
   dropdownText: {
     fontSize: 14,
     fontWeight: "500",
     lineHeight: 20,
     letterSpacing: 0.5,
-    color: "#000000",
   },
   textInputContainer: {
     marginTop: 50,
@@ -291,19 +329,16 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     lineHeight: 20,
     letterSpacing: 0.5,
-    color: "#ffffff",
     alignSelf: "flex-start",
     marginTop: 20,
     marginBottom: 5,
   },
   textInput: {
     height: 144,
-    backgroundColor: "#D9D9D957",
     borderRadius: 20,
     marginright: 13,
     marginleft: 13,
     borderWidth: 0.5,
-    borderColor: "#D9D9D957",
     padding: 10,
   },
 
@@ -315,7 +350,6 @@ const styles = StyleSheet.create({
   },
 
   submitButton: {
-    backgroundColor: "#00FB8A",
     borderRadius: 33,
     width: 206,
     height: 50,
@@ -329,7 +363,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     lineHeight: 20,
     letterSpacing: 0.5,
-    color: "#000000",
   },
   image: {
     width: "100%",

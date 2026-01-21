@@ -1,13 +1,13 @@
+import { useMode } from "@/components/theme/themeProvider";
+import { useResponsive } from "@/components/ui/media";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
+import { ImageBackground, StyleSheet } from "react-native";
 import {
-  ImageBackground,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import { useResponsive } from "../../components/ui/media";
+} from "../../components/theme/ModeHandler";
 
 export default function VerifySuccess() {
   const router = useRouter();
@@ -15,51 +15,63 @@ export default function VerifySuccess() {
   //   media query
 
   const { isSmall } = useResponsive();
+  const { themeMode } = useMode();
+  const content = (
+    <>
+      {/* text */}
+      <View style={styles.textContainer}>
+        <Text style={[styles.accountText, { fontSize: isSmall ? 24 : 26 }]}>
+          {" "}
+          Account verified succesfully
+        </Text>
+        <Text style={styles.reportText}>Make your first report!</Text>
 
-  console.log(isSmall);
+        {/* button */}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => router.push("submitReport")}
+        >
+          <Text style={styles.buttonText}>Make a report</Text>
+        </TouchableOpacity>
+      </View>
+    </>
+  );
+
   return (
     <>
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          { backgroundColor: themeMode === "dark" ? "#000000" : "#00FB8A" },
+        ]}
+      >
         {/* logo */}
         <Image
-          source={require("../../assets/images/logo.png")}
+          source={require("@/assets/images/logo.png")}
           style={styles.logo}
           contentFit="contain"
         />
         {/* success  logo */}
         <Image
-          source={require("../../assets/images/success.png")}
+          source={require("@/assets/images/success.png")}
           style={styles.success}
           contentFit="contain"
         />
 
         {/* backround image */}
         <View style={styles.backroundImageContainer}>
-          <ImageBackground
-            source={require("../../assets/images/wecomepage.png")}
-            style={styles.backroundImage}
-            resizeMode="cover"
-            imageStyle={{ resizeMode: "stretch" }}
-          >
-            {/* text */}
-            <View style={styles.textContainer}>
-              <Text
-                style={[styles.accountText, { fontSize: isSmall ? 24 : 26 }]}
-              >
-                {" "}
-                Account verified succesfully
-              </Text>
-              <Text style={styles.reportText}>Make your first report!</Text>
-
-              {/* button */}
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => router.push("submitReport")}
-              >
-                <Text style={styles.buttonText}>Make a report</Text>
-              </TouchableOpacity>
-            </View>
-          </ImageBackground>
+          {themeMode === "light" ? (
+            <ImageBackground
+              source={require("@/assets/images/wecomepage.png")}
+              style={styles.backroundImage}
+              resizeMode="cover"
+              imageStyle={{ resizeMode: "stretch" }}
+            >
+              {content}
+            </ImageBackground>
+          ) : (
+            <>{content}</>
+          )}
         </View>
       </View>
     </>
@@ -69,7 +81,6 @@ export default function VerifySuccess() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#00FB8A",
   },
   logo: {
     width: 80,
@@ -104,7 +115,6 @@ const styles = StyleSheet.create({
     width: 352,
     lineHeight: 20,
     letterSpacing: 0.6,
-    color: "#ffffff",
     marginTop: 20,
     padding: 10,
   },
@@ -114,7 +124,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     lineHeight: 20,
     letterSpacing: 0.5,
-    color: "#ffffff",
     marginTop: 5,
     marginBottom: 5,
   },
@@ -132,6 +141,5 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     lineHeight: 20,
     letterSpacing: 0.5,
-    color: "#000000",
   },
 });

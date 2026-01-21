@@ -1,25 +1,31 @@
+import { useMode } from "@/components/theme/themeProvider";
 import { useRouter } from "expo-router";
 import {
+  ArrowLeft,
   Bell,
-  ChevronLeft,
   ChevronRight,
   HelpCircle,
   Info,
   Pencil,
   User,
 } from "lucide-react-native";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet } from "react-native";
+import { Card, Text, TouchableOpacity, View } from "../theme/ModeHandler";
 
 export default function SettingsComponent() {
+  const { themeMode } = useMode();
   const router = useRouter();
 
   const SettingItem = ({ icon: Icon, label, onPress }) => (
     <TouchableOpacity style={styles.item} onPress={onPress}>
       <View style={styles.itemLeft}>
-        <Icon size={18} color="#0A2540" />
+        <Icon size={18} color={themeMode === "dark" ? "#FFFFFF" : "#000000"} />
         <Text style={styles.itemText}>{label}</Text>
       </View>
-      <ChevronRight size={18} color="#9CA3AF" />
+      <ChevronRight
+        size={18}
+        color={themeMode === "dark" ? "#FFFFFF" : "#000000"}
+      />
     </TouchableOpacity>
   );
 
@@ -28,7 +34,10 @@ export default function SettingsComponent() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
-          <ChevronLeft size={24} color="#000" />
+          <ArrowLeft
+            size={24}
+            color={themeMode === "dark" ? "#FFFFFF" : "#000000"}
+          />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Settings</Text>
       </View>
@@ -55,7 +64,7 @@ export default function SettingsComponent() {
 
       {/* Support section */}
       <Text style={styles.sectionTitle}>Support</Text>
-      <View style={styles.card}>
+      <Card style={styles.card}>
         <SettingItem
           icon={HelpCircle}
           label="For FAQ"
@@ -66,7 +75,7 @@ export default function SettingsComponent() {
           label="About"
           onPress={() => router.push("about")}
         />
-      </View>
+      </Card>
 
       {/* Footer actions */}
       <View style={styles.footer}>
@@ -85,7 +94,6 @@ export default function SettingsComponent() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
     paddingHorizontal: 20,
     paddingTop: 50,
   },
@@ -100,7 +108,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 22,
     fontWeight: "700",
-    color: "#000",
   },
 
   /* Sections */
@@ -109,12 +116,10 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: 10,
     marginTop: 20,
-    color: "#000",
   },
 
   /* Card */
   card: {
-    backgroundColor: "#F3F4F6",
     borderRadius: 16,
     paddingVertical: 5,
   },
@@ -135,7 +140,6 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 15,
     fontWeight: "500",
-    color: "#0A2540",
   },
 
   /* Footer */

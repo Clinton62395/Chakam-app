@@ -1,67 +1,141 @@
-import { useTheme } from "@react-navigation/native";
+import { useMode } from "@/components/theme/themeProvider";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import { ArrowLeft } from "lucide-react-native";
-import { useMemo, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-import RadioGroup from "react-native-radio-buttons-group";
+import { ArrowLeft, Check } from "lucide-react-native";
+import { useEffect, useState } from "react";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
+} from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScaledSheet } from "react-native-size-matters";
+import { Text, TouchableOpacity, View } from "../theme/ModeHandler";
+
+// Composant Checkbox Animé
+function AnimatedCheckbox({ checked, themeMode }) {
+  const scale = useSharedValue(checked ? 1 : 0);
+  const opacity = useSharedValue(checked ? 1 : 0);
+  const borderColor = useSharedValue(checked ? 1 : 0);
+
+  useEffect(() => {
+    scale.value = withSpring(checked ? 1 : 0, {
+      damping: 12,
+      stiffness: 200,
+    });
+    opacity.value = withTiming(checked ? 1 : 0, { duration: 200 });
+    borderColor.value = withTiming(checked ? 1 : 0, { duration: 200 });
+  }, [checked]);
+
+  const animatedCheckboxStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+    opacity: opacity.value,
+  }));
+
+  const animatedBorderStyle = useAnimatedStyle(() => ({
+    borderColor:
+      borderColor.value === 1
+        ? "#00FB8A"
+        : themeMode === "dark"
+          ? "#404040"
+          : "#E0E0E0",
+  }));
+
+  return (
+    <Animated.View style={[styles.checkbox, animatedBorderStyle]}>
+      <Animated.View style={animatedCheckboxStyle}>
+        <Check size={16} color="#00FB8A" strokeWidth={3} />
+      </Animated.View>
+    </Animated.View>
+  );
+}
 
 export default function AppPreferencesComponent() {
-  const radioButtons = useMemo(
-    () => [
-      { id: "1", label: "Option A", value: "a", color: "#00FB8A" },
-      { id: "2", label: "Option B", value: "b", color: "#00FB8A" },
-    ],
-    [],
-  );
-  const [selected, setSelected] = useState("1");
+  const { themeMode, systemTheme, setThemeMode } = useMode();
 
-  const { themeMode, setThemeMode, systemTheme, theme } = useTheme();
+  const [selected, setSelected] = useState(
+    themeMode === "system" ? systemTheme : themeMode,
+  );
+
+  const onPressRadio = (value) => {
+    setSelected(value);
+    setThemeMode(value);
+  };
 
   const router = useRouter();
+
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[
+        styles.container,
+        { backgroundColor: themeMode === "dark" ? "#000000" : "#FFFFFF" },
+      ]}
+    >
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} style={styles.back}>
-          <ArrowLeft size={24} color="#000" />
+          <ArrowLeft
+            size={24}
+            color={themeMode === "dark" ? "#FFFFFF" : "#000000"}
+          />
         </TouchableOpacity>
-        <Text style={styles.title}>App Preferences</Text>
+        <Text style={[styles.title]}>App Preferences</Text>
       </View>
 
-      {/* Images - prend l'espace restant */}
+      {/* Images */}
       <View style={styles.imageContaner}>
         <Image
-          source={require("../../assets/images/mode-light.png")}
-          style={styles.phone}
+          source={require("@/assets/images/mode-light.png")}
+          style={[styles.phone, { minHeight: 400 }]}
           contentFit="contain"
         />
         <Image
-          source={require("../../assets/images/mode-dark.png")}
+          source={require("@/assets/images/mode-dark.png")}
           style={styles.phone}
           contentFit="contain"
         />
       </View>
 
-      {/* Buttons */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.buttonLight}>
-          <Text style={styles.buttonLightText}>Light Mode</Text>
+      <View style={styles.modeContainer}>
+        {/* Light */}
+        <TouchableOpacity
+          style={[
+            styles.modeItem,
+            selected === "light" && styles.modeItemActive,
+          ]}
+          onPress={() => onPressRadio("light")}
+          activeOpacity={0.8}
+        >
+          <Text style={[styles.modeLabel]}>Light mode</Text>
+          <AnimatedCheckbox
+            checked={selected === "light"}
+            themeMode={themeMode}
+          />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonDark}>
-          <Text style={styles.buttonDarkText}>Dark Mode</Text>
-        </TouchableOpacity>
-      </View>
 
-      {/* Radio buttons */}
-      <View style={styles.radioContainer}>
-        <RadioGroup
-          radioButtons={radioButtons}
-          selectedButtonId="1"
-          onPress={(id) => console.log(id)}
-        />
+        {/* Dark */}
+        <TouchableOpacity
+          style={[
+            styles.modeItem,
+            selected === "dark" && styles.modeItemActive,
+          ]}
+          onPress={() => onPressRadio("dark")}
+          activeOpacity={0.8}
+        >
+          <Text
+            style={[
+              styles.modeLabel,
+              { color: themeMode === "dark" ? "#000000" : "" },
+            ]}
+          >
+            Dark mode
+          </Text>
+          <AnimatedCheckbox
+            checked={selected === "dark"}
+            themeMode={themeMode}
+          />
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -70,7 +144,6 @@ export default function AppPreferencesComponent() {
 const styles = ScaledSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
     padding: "20@ms",
   },
   header: {
@@ -79,7 +152,6 @@ const styles = ScaledSheet.create({
   title: {
     fontSize: "32@ms",
     fontWeight: "700",
-    color: "#000000",
     letterSpacing: -0.5,
     marginTop: "10@ms",
   },
@@ -89,56 +161,45 @@ const styles = ScaledSheet.create({
     marginLeft: "-10@ms",
   },
   imageContaner: {
-    flex: 1,
+    width: "100%",
     flexDirection: "row",
-    gap: "15@ms",
-    marginBottom: "30@ms",
+    alignItems: "center",
+    gap: "15",
   },
   phone: {
-    flex: 1,
-    width: undefined,
-    height: undefined,
+    width: 150,
+    height: "300@ms",
   },
-  buttonContainer: {
+  modeContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    gap: "10@ms",
-    paddingBottom: "10@ms",
+    gap: "20@ms",
+    marginTop: "30@ms",
   },
-  buttonLightText: {
+  modeItem: {
+    width: "120@ms",
+    alignItems: "center",
+    paddingVertical: "14@ms",
+    borderRadius: "16@ms",
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+  },
+  modeItemActive: {
+    borderColor: "#00FB8A",
+    backgroundColor: "#F0FFF8",
+  },
+  modeLabel: {
     fontSize: "14@ms",
-    fontWeight: "bold",
-    color: "#000000",
+    fontWeight: "600",
+    marginBottom: "10@ms",
   },
-  buttonDarkText: {
-    fontSize: "14@ms",
-    fontWeight: "bold",
-    color: "#FFFFFF",
-  },
-  buttonLight: {
-    backgroundColor: "#00FB8A",
-    borderRadius: "33@ms",
-    paddingVertical: "10@ms",
-    paddingHorizontal: "20@ms",
-    minWidth: "121@ms",
-    height: "40@ms",
+  checkbox: {
+    width: "22@ms",
+    height: "22@ms",
+    borderRadius: "6@ms",
+    borderWidth: 2,
     alignItems: "center",
     justifyContent: "center",
-  },
-  buttonDark: {
-    backgroundColor: "#001A3D",
-    borderRadius: "33@ms",
-    paddingVertical: "10@ms",
-    paddingHorizontal: "20@ms",
-    minWidth: "121@ms",
-    height: "40@ms",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  radioContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: "20@ms",
+    backgroundColor: "transparent",
   },
 });
